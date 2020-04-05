@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using AdCap;
 using Platforms.Logger;
-using PlayFab.ClientModels;
 using UniRx;
 
 // Token: 0x02000054 RID: 84
@@ -66,20 +65,10 @@ public class UserDataService : IUserDataService, IDisposable
 	}
 
 	// Token: 0x060002B9 RID: 697 RVA: 0x0000F3A0 File Offset: 0x0000D5A0
-	public void AddPlayFabSegments(IEnumerable<GetSegmentResult> segments)
-	{
-		this.playFabSegments = (from seg in segments
-		select seg.Name).ToArray<string>();
-		if (this.initialized)
-		{
-			this.userTargetingService.SetExternalSegments(this.playFabSegments);
-		}
-	}
 
 	// Token: 0x060002BA RID: 698 RVA: 0x0000F3F6 File Offset: 0x0000D5F6
 	public void HandleUserTargetingInfo(UserTargetingInfoRequestResult requestResult)
 	{
-		this.AddPlayFabSegments(requestResult.Segments);
 		UserTargetingService.SetLegacyTestGroups(requestResult.TestGroups);
 	}
 

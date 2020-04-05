@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using UniRx;
-using UnityEngine.Purchasing;
 
 namespace AdCap.Store
 {
@@ -111,8 +110,6 @@ namespace AdCap.Store
 		// Token: 0x040025A6 RID: 9638
 		public Cost Cost;
 
-		// Token: 0x040025A7 RID: 9639
-		public ProductMetadata RMCostMetaData;
 
 		// Token: 0x040025A8 RID: 9640
 		public List<TriggerData> TriggerDatas = new List<TriggerData>();

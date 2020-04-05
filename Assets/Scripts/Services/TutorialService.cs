@@ -181,14 +181,9 @@ public class TutorialService : IDisposable
 	{
 		this.tutorialBlockDisposableMap.Add(block.BlockId, new CompositeDisposable());
 		List<IEnumerable<TriggerData>> list = block.SkipTriggers.GroupBy((TriggerData x) => x.TriggerGroup, (int trigger, IEnumerable<TriggerData> group) => group).ToList<IEnumerable<TriggerData>>();
-		Func<TriggerData, bool> <>9__3;
 		if (list.Count > 0 && list.Any(delegate(IEnumerable<TriggerData> x)
 		{
-			Func<TriggerData, bool> predicate;
-			if ((predicate = <>9__3) == null)
-			{
-				predicate = (<>9__3 = ((TriggerData y) => this.triggerService.CheckTrigger(y)));
-			}
+			Func<TriggerData, bool> predicate= (y) => this.triggerService.CheckTrigger(y);
 			return x.All(predicate);
 		}))
 		{
@@ -196,14 +191,9 @@ public class TutorialService : IDisposable
 			return;
 		}
 		List<IEnumerable<TriggerData>> list2 = block.StartTriggers.GroupBy((TriggerData x) => x.TriggerGroup, (int trigger, IEnumerable<TriggerData> group) => group).ToList<IEnumerable<TriggerData>>();
-		Func<TriggerData, bool> <>9__11;
 		if (list2.Count == 0 || list2.Any(delegate(IEnumerable<TriggerData> x)
 		{
-			Func<TriggerData, bool> predicate;
-			if ((predicate = <>9__11) == null)
-			{
-				predicate = (<>9__11 = ((TriggerData y) => this.triggerService.CheckTrigger(y)));
-			}
+			Func<TriggerData, bool> predicate = (y) => triggerService.CheckTrigger(y);
 			return x.All(predicate);
 		}))
 		{
@@ -273,12 +263,11 @@ public class TutorialService : IDisposable
 			block.BlockId
 		});
 		this.ClearBlockSubscriptions(block);
-		int index = 1;
+		int i = 1;
 		this.GetStepsForBlock(block).ForEach(delegate(TutorialStep step)
 		{
-			int index = index;
-			index++;
-			step.Index = index;
+			i++;
+			step.Index = i;
 			this.remainingSteps.Enqueue(step);
 		});
 		this.NextStep();

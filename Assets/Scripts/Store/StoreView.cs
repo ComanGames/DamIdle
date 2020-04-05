@@ -6,6 +6,7 @@ using AdCap.Store;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
+using Object = UnityEngine.Object;
 
 // Token: 0x02000258 RID: 600
 public class StoreView : PanelBaseClass
@@ -54,9 +55,8 @@ public class StoreView : PanelBaseClass
 			yield break;
 		}
 		yield return new WaitForSeconds(0.25f);
-		object obj = (this.scrollRect.viewport != null) ? this.scrollRect.viewport : ((RectTransform)this.scrollRect.transform);
+		RectTransform obj2 = (this.scrollRect.viewport != null) ? this.scrollRect.viewport : ((RectTransform)this.scrollRect.transform);
 		Vector3[] fourCornersArray = new Vector3[4];
-		object obj2 = obj;
 		obj2.GetWorldCorners(fourCornersArray);
 		Rect rect = ((RectTransform)obj2.transform).rect;
 		float num = Mathf.Abs(this.scrollRect.content.rect.height) - Mathf.Abs(rect.height);

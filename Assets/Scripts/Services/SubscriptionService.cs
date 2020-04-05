@@ -142,9 +142,7 @@ public class SubscriptionService : IDisposable
 	private IEnumerator ScheduleNotification()
 	{
 		DateTime notificationTime = this.dateTimeService.UtcNow.AddDays((double)PlayerPrefs.GetInt("ARD", 0));
-		Notifications.ClearLocalNotification(79);
 		yield return new WaitForSeconds(0.1f);
-		Notifications.Schedule("Gold Subscription expires tomorrow!", "Your last Daily Gold Delivery arrives tomorrow! Renew your Gold Subscription now to continue receiving sweet, sweet gold!", notificationTime, 79);
 		yield break;
 	}
 

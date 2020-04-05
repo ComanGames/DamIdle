@@ -8,7 +8,7 @@ using Utils;
 public interface IEventMissionService : IDisposable
 {
 	// Token: 0x0600032D RID: 813
-	void Init(IGameController gameController, IDateTimeService dateTimeService, TimerService timerService, IAngelInvestorService angelInvestorService, IStoreService storeService, AdWatchService adService, UpgradeService upgradeService, IEventService eventService, IAnalyticService analyticService, ProfitBoostAdService profitBoostAdService);
+	void Init(IGameController gameController, IDateTimeService dateTimeService, TimerService timerService, IAngelInvestorService angelInvestorService, IStoreService storeService, UpgradeService upgradeService, IEventService eventService, IAnalyticService analyticService, ProfitBoostAdService profitBoostAdService);
 
 	// Token: 0x0600032E RID: 814
 	bool RefreshTasksForGold();

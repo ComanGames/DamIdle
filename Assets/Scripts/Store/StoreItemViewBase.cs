@@ -29,16 +29,6 @@ public abstract class StoreItemViewBase : MonoBehaviour, IDisposable
 		if (null != this.txt_TimeRemaining)
 		{
 			this.txt_TimeRemaining.text = string.Empty;
-			if (item.Duration > 0.0 || item.EndDateUtc != DateTime.MinValue)
-			{
-				item.TimeRemaining.DistinctUntilChanged<double>().Subscribe(delegate(double x)
-				{
-					if (this.txt_TimeRemaining != null)
-					{
-						this.txt_TimeRemaining.text = ((x > 0.0) ? x.ToCountdown("Only {0} Remaining!") : "Last Chance!");
-					}
-				}).AddTo(this.disposables);
-			}
 		}
 		if (null != this.go_Banner && null != this.txt_BannerText)
 		{
@@ -74,14 +64,6 @@ public abstract class StoreItemViewBase : MonoBehaviour, IDisposable
 	}
 
 	// Token: 0x060010C9 RID: 4297 RVA: 0x0004D220 File Offset: 0x0004B420
-	protected void CreateBundleItemView(string itemName, Item item, bool isEquipable, Color c, int qty)
-	{
-		BundleItemView bundleItemView = Object.Instantiate<BundleItemView>(this.bundleItemViewPrefab, this.bundleItemPrefabParent, false);
-		if (null != bundleItemView)
-		{
-			bundleItemView.WireData(itemName, item, isEquipable, c, qty);
-		}
-	}
 
 	// Token: 0x04000E5C RID: 3676
 	[SerializeField]
@@ -98,10 +80,6 @@ public abstract class StoreItemViewBase : MonoBehaviour, IDisposable
 	// Token: 0x04000E5F RID: 3679
 	[SerializeField]
 	protected Text txt_TimeRemaining;
-
-	// Token: 0x04000E60 RID: 3680
-	[SerializeField]
-	protected BundleItemView bundleItemViewPrefab;
 
 	// Token: 0x04000E61 RID: 3681
 	[SerializeField]

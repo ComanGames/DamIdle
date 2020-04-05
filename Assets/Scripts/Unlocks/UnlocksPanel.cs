@@ -3,6 +3,7 @@ using ListContentPools;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
+using Object = UnityEngine.Object;
 
 // Token: 0x0200025D RID: 605
 public class UnlocksPanel : PanelBaseClass

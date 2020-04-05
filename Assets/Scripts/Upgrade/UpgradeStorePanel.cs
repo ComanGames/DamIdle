@@ -5,6 +5,7 @@ using AdCap.Store;
 using ListContentPools;
 using UniRx;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 // Token: 0x0200011A RID: 282
 public class UpgradeStorePanel : PanelBaseClass

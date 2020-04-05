@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using AdComm;
 using UniRx;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 // Token: 0x02000200 RID: 512
 public class PlanetThemeService
@@ -263,8 +264,8 @@ public class PlanetThemeService
 	private PlanetThemeService.PlanetAssetCache<VentureColors> VentureViewLocalDataCache = new PlanetThemeService.PlanetAssetCache<VentureColors>();
 
 	// Token: 0x020008BF RID: 2239
-	private class PlanetAssetCache<T> : IDisposable where T : Object
-	{
+	private class PlanetAssetCache<T> : IDisposable
+    {
 		// Token: 0x06002BFB RID: 11259 RVA: 0x000AEDD9 File Offset: 0x000ACFD9
 		public void Dispose()
 		{

@@ -375,7 +375,6 @@ namespace AdCap.Store
 					{
 						storeItem.Value.Cost.Price = (double)catalogStoreItem.Metadata.localizedPrice;
 						storeItem.Value.Cost.LocalizedPriceString = catalogStoreItem.Metadata.localizedPriceString;
-						storeItem.Value.RMCostMetaData = catalogStoreItem.Metadata;
 					}
 					else if (storeItem.Value.Cost.Currency == Currency.Cash && (catalogStoreItem == null || catalogStoreItem.Metadata == null))
 					{
@@ -594,12 +593,7 @@ namespace AdCap.Store
 			List<string> purchaseDataIds = (from x in this.PurchaseData
 			select x.ItemId).ToList<string>();
 			IEnumerable<KeyValuePair<string, AdCapStoreItem>> storeItemMap = this.StoreItemMap;
-			Func<KeyValuePair<string, AdCapStoreItem>, bool> <>9__1;
-			Func<KeyValuePair<string, AdCapStoreItem>, bool> predicate;
-			if ((predicate = <>9__1) == null)
-			{
-				predicate = (<>9__1 = ((KeyValuePair<string, AdCapStoreItem> x) => !purchaseDataIds.Contains(x.Value.Id)));
-			}
+			Func<KeyValuePair<string, AdCapStoreItem>, bool> predicate = (x) => !purchaseDataIds.Contains(x.Value.Id);
 			foreach (KeyValuePair<string, AdCapStoreItem> keyValuePair in storeItemMap.Where(predicate))
 			{
 				ItemPurchaseData item = new ItemPurchaseData(keyValuePair.Value.Id);
@@ -656,12 +650,10 @@ namespace AdCap.Store
 		{
 			DateTime now = this.dateTimeService.UtcNow;
 			IEnumerable<ItemPurchaseData> purchaseData = this.PurchaseData;
-			Func<ItemPurchaseData, bool> <>9__0;
-			Func<ItemPurchaseData, bool> predicate;
-			if ((predicate = <>9__0) == null)
-			{
-				predicate = (<>9__0 = ((ItemPurchaseData x) => this.StoreItemMap.ContainsKey(x.ItemId) && x.ExpiryDate != DateTime.MinValue && x.ExpiryDate <= now));
-			}
+            Func<ItemPurchaseData, bool> predicate = (x) =>
+            {
+              return this.StoreItemMap.ContainsKey(x.ItemId) && x.ExpiryDate != DateTime.MinValue && x.ExpiryDate <= now;
+            };
 			foreach (ItemPurchaseData itemPurchaseData in purchaseData.Where(predicate))
 			{
 				if (this.StoreItemMap[itemPurchaseData.ItemId].EndDateUtc != DateTime.MinValue)
@@ -707,19 +699,19 @@ namespace AdCap.Store
 			string text = this.playerData.Get(StoreService.ITEMS_PURCHASED_KEY, "");
 			if (!string.IsNullOrEmpty(text))
 			{
-				StoreService.<>c__DisplayClass69_0 CS$<>8__locals1 = new StoreService.<>c__DisplayClass69_0();
-				CS$<>8__locals1.seperatedIds = text.Split(new char[]
+				StoreService.DataContainer localData = new StoreService.DataContainer();
+				localData.seperatedIds = text.Split(new char[]
 				{
 					','
 				});
 				int j;
 				int i;
-				for (i = 0; i < CS$<>8__locals1.seperatedIds.Length; i = j)
+				for (i = 0; i < localData.seperatedIds.Length; i = j)
 				{
-					ItemPurchaseData itemPurchaseData = this.PurchaseData.FirstOrDefault((ItemPurchaseData x) => x.ItemId == CS$<>8__locals1.seperatedIds[i]);
+					ItemPurchaseData itemPurchaseData = this.PurchaseData.FirstOrDefault((ItemPurchaseData x) => x.ItemId == localData.seperatedIds[i]);
 					if (itemPurchaseData == null)
 					{
-						itemPurchaseData = new ItemPurchaseData(CS$<>8__locals1.seperatedIds[i]);
+						itemPurchaseData = new ItemPurchaseData(localData.seperatedIds[i]);
 						this.PurchaseData.Add(itemPurchaseData);
 					}
 					itemPurchaseData.CurrentPurchaseCount.Value = 1;
@@ -731,19 +723,18 @@ namespace AdCap.Store
 			string text2 = this.playerData.Get(StoreService.ITEMS_EXPIRED_KEY, "");
 			if (!string.IsNullOrEmpty(text2))
 			{
-				StoreService.<>c__DisplayClass69_2 CS$<>8__locals3 = new StoreService.<>c__DisplayClass69_2();
-				CS$<>8__locals3.seperatedIds = text2.Split(new char[]
+				StoreService.DataContainer data = new StoreService.DataContainer();
+				data.seperatedIds = text2.Split(new char[]
 				{
 					','
 				});
-				int j;
-				int i;
-				for (i = 0; i < CS$<>8__locals3.seperatedIds.Length; i = j)
+				int j= 0;
+				for (int i = 0; i < data.seperatedIds.Length; i = j)
 				{
-					ItemPurchaseData itemPurchaseData2 = this.PurchaseData.FirstOrDefault((ItemPurchaseData x) => x.ItemId == CS$<>8__locals3.seperatedIds[i]);
+					ItemPurchaseData itemPurchaseData2 = this.PurchaseData.FirstOrDefault((ItemPurchaseData x) => x.ItemId == data.seperatedIds[i]);
 					if (itemPurchaseData2 == null)
 					{
-						itemPurchaseData2 = new ItemPurchaseData(CS$<>8__locals3.seperatedIds[i]);
+						itemPurchaseData2 = new ItemPurchaseData(data.seperatedIds[i]);
 						this.PurchaseData.Add(itemPurchaseData2);
 					}
 					itemPurchaseData2.CurrentPurchaseCount.Value = 1;
@@ -756,7 +747,12 @@ namespace AdCap.Store
 			this.playerData.Set(StoreService.ITEMS_PURCHASED_KEY, "");
 		}
 
-		// Token: 0x060024E7 RID: 9447 RVA: 0x000A0474 File Offset: 0x0009E674
+        private class DataContainer
+        {
+            public string[] seperatedIds;
+        }
+
+        // Token: 0x060024E7 RID: 9447 RVA: 0x000A0474 File Offset: 0x0009E674
 		private void ConvertOldIdsToNewIds()
 		{
 			Dictionary<string, string> dictionary = new Dictionary<string, string>

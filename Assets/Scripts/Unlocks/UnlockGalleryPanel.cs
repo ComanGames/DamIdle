@@ -3,6 +3,7 @@ using System.Linq;
 using ListContentPools;
 using UniRx;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 // Token: 0x0200025A RID: 602
 public class UnlockGalleryPanel : MonoBehaviour

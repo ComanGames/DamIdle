@@ -19,22 +19,12 @@ public class TimeWarpService : IDisposable
 	}
 
 	// Token: 0x060006AE RID: 1710 RVA: 0x0002393C File Offset: 0x00021B3C
-	public void Init(UnfoldingService unfoldingService, ScheduledOfferService scheduledOfferService, IStoreService storeService)
+	public void Init(UnfoldingService unfoldingService, IStoreService storeService)
 	{
 		this.stateDisposable = GameController.Instance.State.Subscribe(new Action<GameState>(this.OnStateChanged));
 		this.unfoldingService = unfoldingService;
 		this.storeService = storeService;
 		this.RetrieveStoreItem(TimeWarpService.TIME_WARP_EXPRESS_ITEM_ID);
-		scheduledOfferService.MonitorForActiveOfferOfType(ScheduledOfferType.TIME_WARP_EXPRESS_SALE).Subscribe(delegate(ScheduledOfferModel offer)
-		{
-			this.storeItemDisposable.Dispose();
-			string tweStoreItemId = TimeWarpService.TIME_WARP_EXPRESS_ITEM_ID;
-			if (offer != null)
-			{
-				tweStoreItemId = (offer.Config as ScheduledTimeWarpExpressSaleConfig).AlternateItemID;
-			}
-			this.RetrieveStoreItem(tweStoreItemId);
-		}).AddTo(this.disposables);
 	}
 
 	// Token: 0x060006AF RID: 1711 RVA: 0x000239A8 File Offset: 0x00021BA8

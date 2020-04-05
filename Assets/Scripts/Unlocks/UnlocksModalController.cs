@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
+using Object = UnityEngine.Object;
 
 // Token: 0x02000185 RID: 389
 public class UnlocksModalController : ModalController
