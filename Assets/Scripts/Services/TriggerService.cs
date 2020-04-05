@@ -118,115 +118,115 @@ public class TriggerService : ITriggerService, IDisposable
 	// Token: 0x06000EFF RID: 3839 RVA: 0x00043EC8 File Offset: 0x000420C8
 	private IObservable<bool> MonitorTriggerInternal(TriggerData triggerData)
 	{
-		TriggerService.<>c__DisplayClass26_0 CS$<>8__locals1 = new TriggerService.<>c__DisplayClass26_0();
-		CS$<>8__locals1.triggerData = triggerData;
-		CS$<>8__locals1.<>4__this = this;
-		CS$<>8__locals1.threshold = 0.0;
-		switch (CS$<>8__locals1.triggerData.TriggerType)
+		TriggerService.TriggerContainer result = new TriggerService.TriggerContainer();
+		result.triggerData = triggerData;
+		result.triggerService = this;
+		result.threshold = 0.0;
+		switch (result.triggerData.TriggerType)
 		{
 		case ETriggerType.None:
 			return Observable.Return(true);
 		case ETriggerType.EventStart:
-			return this.CreateOrRetrieveEventStartedObservable(CS$<>8__locals1.triggerData.Id);
+			return this.CreateOrRetrieveEventStartedObservable(result.triggerData.Id);
 		case ETriggerType.EventUnlocked:
 			return (from x in MessageBroker.Default.Receive<EventUnlockedEvent>()
-			where string.IsNullOrEmpty(CS$<>8__locals1.triggerData.Value) || CS$<>8__locals1.triggerData.Id == x.EventData.name
+			where string.IsNullOrEmpty(result.triggerData.Value) || result.triggerData.Id == x.EventData.name
 			select x into _
 			select true).StartWith(false);
 		case ETriggerType.ItemPurchased:
 			return from _ in this.storeService.PurchaseData.ObserveCountChanged(true)
-			select CS$<>8__locals1.<>4__this.CheckPurchasedItem(CS$<>8__locals1.triggerData.Id);
+			select result.triggerService.CheckPurchasedItem(result.triggerData.Id);
 		case ETriggerType.PlanetUnlocked:
 			return (from x in MessageBroker.Default.Receive<PlanetPurchasedEvent>()
-			select x.planetName == CS$<>8__locals1.triggerData.Id).StartWith(false);
+			select x.planetName == result.triggerData.Id).StartWith(false);
 		case ETriggerType.VentureQuantity:
-			if (double.TryParse(CS$<>8__locals1.triggerData.Value, out CS$<>8__locals1.threshold))
+			if (double.TryParse(result.triggerData.Value, out result.threshold))
 			{
-				return this.MonitorVentureQuantity(CS$<>8__locals1.triggerData, CS$<>8__locals1.threshold);
+				return this.MonitorVentureQuantity(result.triggerData, result.threshold);
 			}
 			break;
 		case ETriggerType.SessionCount:
-			if (double.TryParse(CS$<>8__locals1.triggerData.Value, out CS$<>8__locals1.threshold))
+			if (double.TryParse(result.triggerData.Value, out result.threshold))
 			{
 				return from x in this.gameController.GlobalPlayerData.GetObservable(GameController.SESSION_COUNT_KEY, 0.0)
-				select CS$<>8__locals1.<>4__this.Compare<double>(CS$<>8__locals1.triggerData.Operator, x, CS$<>8__locals1.threshold);
+				select result.triggerService.Compare<double>(result.triggerData.Operator, x, result.threshold);
 			}
 			break;
 		case ETriggerType.GoldOnHand:
-			if (double.TryParse(CS$<>8__locals1.triggerData.Value, out CS$<>8__locals1.threshold))
+			if (double.TryParse(result.triggerData.Value, out result.threshold))
 			{
 				return from x in this.gameController.GlobalPlayerData.GetObservable("Gold", 0.0)
-				select CS$<>8__locals1.<>4__this.Compare<double>(CS$<>8__locals1.triggerData.Operator, x, CS$<>8__locals1.threshold);
+				select result.triggerService.Compare<double>(result.triggerData.Operator, x, result.threshold);
 			}
 			break;
 		case ETriggerType.MegaBucksOnHand:
-			if (double.TryParse(CS$<>8__locals1.triggerData.Value, out CS$<>8__locals1.threshold))
+			if (double.TryParse(result.triggerData.Value, out result.threshold))
 			{
 				return from x in this.gameController.GlobalPlayerData.GetObservable("MegaBucksBalance", 0.0)
-				select CS$<>8__locals1.<>4__this.Compare<double>(CS$<>8__locals1.triggerData.Operator, x, CS$<>8__locals1.threshold);
+				select result.triggerService.Compare<double>(result.triggerData.Operator, x, result.threshold);
 			}
 			break;
 		case ETriggerType.CompletedRealMoneyPurchases:
-			if (double.TryParse(CS$<>8__locals1.triggerData.Value, out CS$<>8__locals1.threshold))
+			if (double.TryParse(result.triggerData.Value, out result.threshold))
 			{
 				return from x in this.storeService.TotalRMPurchaseCount
-				select CS$<>8__locals1.<>4__this.Compare<double>(CS$<>8__locals1.triggerData.Operator, (double)x, CS$<>8__locals1.threshold);
+				select result.triggerService.Compare<double>(result.triggerData.Operator, (double)x, result.threshold);
 			}
 			break;
 		case ETriggerType.InAbTestGroup:
-			return Observable.Return(this.userDataService.IsTestGroupMember(CS$<>8__locals1.triggerData.Id, CS$<>8__locals1.triggerData.Value));
+			return Observable.Return(this.userDataService.IsTestGroupMember(result.triggerData.Id, result.triggerData.Value));
 		case ETriggerType.AngelsClaimed:
-			if (double.TryParse(CS$<>8__locals1.triggerData.Value, out CS$<>8__locals1.threshold))
+			if (double.TryParse(result.triggerData.Value, out result.threshold))
 			{
-				return this.MonitorAngelClaimedQuantity(CS$<>8__locals1.triggerData, CS$<>8__locals1.threshold);
+				return this.MonitorAngelClaimedQuantity(result.triggerData, result.threshold);
 			}
 			break;
 		case ETriggerType.BundleViewed:
 		{
-			ItemPurchaseData itemPurchaseData = this.storeService.PurchaseData.FirstOrDefault((ItemPurchaseData data) => data.ItemId == CS$<>8__locals1.triggerData.Id);
+			ItemPurchaseData itemPurchaseData = this.storeService.PurchaseData.FirstOrDefault((ItemPurchaseData data) => data.ItemId == result.triggerData.Id);
 			if (itemPurchaseData != null)
 			{
 				return Observable.Return(true);
 			}
 			return (from x in this.storeService.PurchaseData.ObserveAdd()
-			where x.Value.ItemId == CS$<>8__locals1.triggerData.Id
+			where x.Value.ItemId == result.triggerData.Id
 			select Observable.Return(true)).Switch<bool>();
 		}
 		case ETriggerType.TimeUtcNow:
 		{
 			DateTime dt;
-			if (DateTime.TryParse(CS$<>8__locals1.triggerData.Value, out dt))
+			if (DateTime.TryParse(result.triggerData.Value, out dt))
 			{
 				return from x in Observable.Interval(TimeSpan.FromSeconds(5.0))
-				select CS$<>8__locals1.<>4__this.Compare<DateTime>(CS$<>8__locals1.triggerData.Operator, CS$<>8__locals1.<>4__this.dateTimeService.UtcNow, dt);
+				select result.triggerService.Compare<DateTime>(result.triggerData.Operator, result.triggerService.dateTimeService.UtcNow, dt);
 			}
 			break;
 		}
 		case ETriggerType.ValueToDateUSD:
-			if (double.TryParse(CS$<>8__locals1.triggerData.Value, out CS$<>8__locals1.threshold))
+			if (double.TryParse(result.triggerData.Value, out result.threshold))
 			{
 				return (from x in this.dataService.ValueToDateUSD
-				select CS$<>8__locals1.<>4__this.Compare<double>(CS$<>8__locals1.triggerData.Operator, x, CS$<>8__locals1.threshold)).StartWith(false);
+				select result.triggerService.Compare<double>(result.triggerData.Operator, x, result.threshold)).StartWith(false);
 			}
 			break;
 		case ETriggerType.AngelResetCount:
-			if (double.TryParse(CS$<>8__locals1.triggerData.Value, out CS$<>8__locals1.threshold))
+			if (double.TryParse(result.triggerData.Value, out result.threshold))
 			{
-				return this.MonitorAngelResetQuantity(CS$<>8__locals1.triggerData, CS$<>8__locals1.threshold);
+				return this.MonitorAngelResetQuantity(result.triggerData, result.threshold);
 			}
 			break;
 		case ETriggerType.InSegment:
 		{
-			bool flag = this.dataService.PlayerSegments.Contains(CS$<>8__locals1.triggerData.Id);
-			bool flag2 = bool.Parse(CS$<>8__locals1.triggerData.Value);
-			string @operator = CS$<>8__locals1.triggerData.Operator;
+			bool flag = this.dataService.PlayerSegments.Contains(result.triggerData.Id);
+			bool flag2 = bool.Parse(result.triggerData.Value);
+			string @operator = result.triggerData.Operator;
 			if (@operator == "==")
 			{
 				return Observable.Return(flag == flag2);
 			}
 			if (!(@operator == "!="))
 			{
-				Debug.LogError("[TriggerService](InSegment) Operator " + CS$<>8__locals1.triggerData.Operator + " is not valid for this trigger type");
+				Debug.LogError("[TriggerService](InSegment) Operator " + result.triggerData.Operator + " is not valid for this trigger type");
 				return Observable.Return(false);
 			}
 			return Observable.Return(flag != flag2);
@@ -234,143 +234,143 @@ public class TriggerService : ITriggerService, IDisposable
 		case ETriggerType.InEvent:
 		{
 			bool inEvent;
-			if (bool.TryParse(CS$<>8__locals1.triggerData.Value, out inEvent))
+			if (bool.TryParse(result.triggerData.Value, out inEvent))
 			{
 				return from x in this.gameController.State
-				select CS$<>8__locals1.<>4__this.Compare<bool>(CS$<>8__locals1.triggerData.Operator, inEvent, x.IsEventPlanet);
+				select result.triggerService.Compare<bool>(result.triggerData.Operator, inEvent, x.IsEventPlanet);
 			}
 			break;
 		}
 		case ETriggerType.NumEventsPlayed:
 		{
 			int numEvents;
-			if (int.TryParse(CS$<>8__locals1.triggerData.Value, out numEvents))
+			if (int.TryParse(result.triggerData.Value, out numEvents))
 			{
 				return from x in this.gameController.EventService.PastEvents.ObserveCountChanged(true)
-				select CS$<>8__locals1.<>4__this.Compare<int>(CS$<>8__locals1.triggerData.Operator, x, numEvents);
+				select result.triggerService.Compare<int>(result.triggerData.Operator, x, numEvents);
 			}
 			break;
 		}
 		case ETriggerType.TutorialStepComplete:
 		{
 			bool isCompleted;
-			if (bool.TryParse(CS$<>8__locals1.triggerData.Value, out isCompleted))
+			if (bool.TryParse(result.triggerData.Value, out isCompleted))
 			{
 				return (from x in this.gameController.TutorialService.CompletedTutorialSteps.ObserveCountChanged(true)
-				select CS$<>8__locals1.<>4__this.gameController.TutorialService.CompletedTutorialSteps.Contains(CS$<>8__locals1.triggerData.Id) == isCompleted).StartWith(false);
+				select result.triggerService.gameController.TutorialService.CompletedTutorialSteps.Contains(result.triggerData.Id) == isCompleted).StartWith(false);
 			}
 			break;
 		}
 		case ETriggerType.UpgradePurchased:
-			return this.MonitorUpgradePurchased(CS$<>8__locals1.triggerData);
+			return this.MonitorUpgradePurchased(result.triggerData);
 		case ETriggerType.CashOnHand:
-			if (double.TryParse(CS$<>8__locals1.triggerData.Value, out CS$<>8__locals1.threshold))
+			if (double.TryParse(result.triggerData.Value, out result.threshold))
 			{
-				return this.MonitorCashOnHand(CS$<>8__locals1.triggerData, CS$<>8__locals1.threshold);
+				return this.MonitorCashOnHand(result.triggerData, result.threshold);
 			}
 			break;
 		case ETriggerType.AngelsPending:
-			if (double.TryParse(CS$<>8__locals1.triggerData.Value, out CS$<>8__locals1.threshold))
+			if (double.TryParse(result.triggerData.Value, out result.threshold))
 			{
-				return this.MonitorPendingAngels(CS$<>8__locals1.triggerData, CS$<>8__locals1.threshold);
+				return this.MonitorPendingAngels(result.triggerData, result.threshold);
 			}
 			break;
 		case ETriggerType.ItemOwned:
 		{
-			Item itemById = this.gameController.GlobalPlayerData.inventory.GetItemById(CS$<>8__locals1.triggerData.Id);
+			Item itemById = this.gameController.GlobalPlayerData.inventory.GetItemById(result.triggerData.Id);
 			if (itemById == null)
 			{
 				this.logger.Error("Trying to monitor an Item that doesn't exist");
 			}
-			else if (double.TryParse(CS$<>8__locals1.triggerData.Value, out CS$<>8__locals1.threshold))
+			else if (double.TryParse(result.triggerData.Value, out result.threshold))
 			{
 				return from x in itemById.Owned
-				select CS$<>8__locals1.<>4__this.Compare<double>(CS$<>8__locals1.triggerData.Operator, (double)x, CS$<>8__locals1.threshold);
+				select result.triggerService.Compare<double>(result.triggerData.Operator, (double)x, result.threshold);
 			}
 			break;
 		}
 		case ETriggerType.CurrentGameLocation:
-			return this.MonitorGameLocation(CS$<>8__locals1.triggerData);
+			return this.MonitorGameLocation(result.triggerData);
 		case ETriggerType.BuyMultiplierValue:
-			if (double.TryParse(CS$<>8__locals1.triggerData.Value, out CS$<>8__locals1.threshold))
+			if (double.TryParse(result.triggerData.Value, out result.threshold))
 			{
 				return from x in this.gameController.BuyMultiplierService.BuyCount
-				select CS$<>8__locals1.<>4__this.Compare<double>(CS$<>8__locals1.triggerData.Operator, (double)x, CS$<>8__locals1.threshold);
+				select result.triggerService.Compare<double>(result.triggerData.Operator, (double)x, result.threshold);
 			}
 			break;
 		case ETriggerType.VentureGilded:
-			return this.MonitorVentureGilded(CS$<>8__locals1.triggerData);
+			return this.MonitorVentureGilded(result.triggerData);
 		case ETriggerType.ItemTypeQuantity:
-			if (double.TryParse(CS$<>8__locals1.triggerData.Value, out CS$<>8__locals1.threshold))
+			if (double.TryParse(result.triggerData.Value, out result.threshold))
 			{
-				return this.MonitorItemTypeOwned(CS$<>8__locals1.triggerData, CS$<>8__locals1.threshold);
+				return this.MonitorItemTypeOwned(result.triggerData, result.threshold);
 			}
 			break;
 		case ETriggerType.GiftClaimed:
-			if (this.gameController.GiftService.ClaimedGiftIds.Contains(CS$<>8__locals1.triggerData.Id))
+			if (this.gameController.GiftService.ClaimedGiftIds.Contains(result.triggerData.Id))
 			{
 				return Observable.Return(true);
 			}
 			return from x in this.gameController.GiftService.ClaimedGiftIds.ObserveAdd()
-			select x.Value == CS$<>8__locals1.triggerData.Id;
+			select x.Value == result.triggerData.Id;
 		case ETriggerType.VentureRunning:
 		{
 			bool value;
-			if (bool.TryParse(CS$<>8__locals1.triggerData.Value, out value))
+			if (bool.TryParse(result.triggerData.Value, out value))
 			{
-				return this.MonitorVentureRunning(CS$<>8__locals1.triggerData, value);
+				return this.MonitorVentureRunning(result.triggerData, value);
 			}
 			break;
 		}
 		case ETriggerType.AngelsPendingPercentage:
-			if (double.TryParse(CS$<>8__locals1.triggerData.Value, out CS$<>8__locals1.threshold))
+			if (double.TryParse(result.triggerData.Value, out result.threshold))
 			{
-				return this.MonitorPendingAngelsPercentage(CS$<>8__locals1.triggerData, CS$<>8__locals1.threshold);
+				return this.MonitorPendingAngelsPercentage(result.triggerData, result.threshold);
 			}
 			break;
 		case ETriggerType.UnfoldingStepComplete:
 		{
 			bool flag3;
-			if (bool.TryParse(CS$<>8__locals1.triggerData.Value, out flag3))
+			if (bool.TryParse(result.triggerData.Value, out flag3))
 			{
-				if (this.gameController.UnfoldingService.CompletedUnfoldingStepIds.Contains(CS$<>8__locals1.triggerData.Id) == flag3)
+				if (this.gameController.UnfoldingService.CompletedUnfoldingStepIds.Contains(result.triggerData.Id) == flag3)
 				{
-					return Observable.Return(true).DebugLog(CS$<>8__locals1.triggerData.Id);
+					return Observable.Return(true);
 				}
 				return (from x in this.gameController.UnfoldingService.CompletedUnfoldingStepIds.ObserveAdd()
-				select x.Value == CS$<>8__locals1.triggerData.Id).DebugLog(CS$<>8__locals1.triggerData.Id);
+				select x.Value == result.triggerData.Id);
 			}
 			break;
 		}
 		case ETriggerType.EventScore:
-			if (double.TryParse(CS$<>8__locals1.triggerData.Value, out CS$<>8__locals1.threshold))
+			if (double.TryParse(result.triggerData.Value, out result.threshold))
 			{
 				return from x in this.eventMissionService.CurentScore
-				select CS$<>8__locals1.<>4__this.Compare<double>(CS$<>8__locals1.triggerData.Operator, (double)x, CS$<>8__locals1.threshold);
+				select result.triggerService.Compare<double>(result.triggerData.Operator, (double)x, result.threshold);
 			}
 			break;
 		case ETriggerType.PlanetMilestoneClaimedCount:
-			if (double.TryParse(CS$<>8__locals1.triggerData.Value, out CS$<>8__locals1.threshold))
+			if (double.TryParse(result.triggerData.Value, out result.threshold))
 			{
 				return from x in (from x in this.planetMilestoneService.GetUserMilestonesForCurrentPlanet()
 				select x.State).CombineLatest<UserPlanetMilestone.PlanetMilestoneState>()
-				select CS$<>8__locals1.<>4__this.Compare<double>(CS$<>8__locals1.triggerData.Operator, (double)x.Count((UserPlanetMilestone.PlanetMilestoneState y) => y == UserPlanetMilestone.PlanetMilestoneState.CLAIMED), CS$<>8__locals1.threshold);
+				select result.triggerService.Compare<double>(result.triggerData.Operator, (double)x.Count((UserPlanetMilestone.PlanetMilestoneState y) => y == UserPlanetMilestone.PlanetMilestoneState.CLAIMED), result.threshold);
 			}
 			break;
 		case ETriggerType.PlanetProgressionType:
 		{
 			PlanetProgressionType progType;
-			if (Enum.TryParse<PlanetProgressionType>(CS$<>8__locals1.triggerData.Value, true, out progType))
+			if (Enum.TryParse<PlanetProgressionType>(result.triggerData.Value, true, out progType))
 			{
 				return from state in this.state
-				select CS$<>8__locals1.<>4__this.Compare<int>(CS$<>8__locals1.triggerData.Operator, (int)progType, (int)state.progressionType);
+				select result.triggerService.Compare<int>(result.triggerData.Operator, (int)progType, (int)state.progressionType);
 			}
 			break;
 		}
 		case ETriggerType.FirstTimeBuyerPackPurchased:
 		{
 			bool isPurchased;
-			if (bool.TryParse(CS$<>8__locals1.triggerData.Value, out isPurchased))
+			if (bool.TryParse(result.triggerData.Value, out isPurchased))
 			{
 				return (from x in this.firstTimePurchaseService.HasPurchasedFirstTimeBuyerItem
 				select x == isPurchased).StartWith(this.firstTimePurchaseService.HasPurchasedFirstTimeBuyerItem.Value);
@@ -383,7 +383,14 @@ public class TriggerService : ITriggerService, IDisposable
 		return Observable.Return(false);
 	}
 
-	// Token: 0x06000F00 RID: 3840 RVA: 0x000449C8 File Offset: 0x00042BC8
+    private class TriggerContainer
+    {
+        public TriggerData triggerData;
+        public TriggerService triggerService;
+        public double threshold;
+    }
+
+    // Token: 0x06000F00 RID: 3840 RVA: 0x000449C8 File Offset: 0x00042BC8
 	private IObservable<bool> MonitorGameLocation(TriggerData triggerData)
 	{
 		return OrientationController.Instance.OrientationStream.CombineLatest(this.navigationService.CurrentLocation, this.gameController.State, delegate(OrientationChangedEvent orientation, string loc, GameState state)
@@ -495,17 +502,12 @@ public class TriggerService : ITriggerService, IDisposable
 		VentureModel value;
 		if (this.ventureMap.TryGetValue(triggerData.Id, out value))
 		{
-			Func<double, bool> <>9__4;
 			return (from v in this.ventureMap.ObserveAdd().StartWith(new DictionaryAddEvent<string, VentureModel>(triggerData.Id, value))
 			where v.Key == triggerData.Id
 			select v).Select(delegate(DictionaryAddEvent<string, VentureModel> v)
 			{
 				IObservable<double> totalOwned = v.Value.TotalOwned;
-				Func<double, bool> selector;
-				if ((selector = <>9__4) == null)
-				{
-					selector = (<>9__4 = ((double x) => this.Compare<double>(triggerData.Operator, x, threshold)));
-				}
+				Func<double, bool> selector = ( ((double x) => this.Compare<double>(triggerData.Operator, x, threshold)));
 				return totalOwned.Select(selector);
 			}).Switch<bool>().StartWith(false);
 		}
@@ -535,17 +537,12 @@ public class TriggerService : ITriggerService, IDisposable
 					return Observable.Return(true);
 				}
 			}
-			Func<double, bool> <>9__7;
 			return (from v in this.ventureMap.ObserveAdd()
 			where v.Key == triggerData.Id
 			select v).Select(delegate(DictionaryAddEvent<string, VentureModel> v)
 			{
 				IObservable<double> totalOwned = v.Value.TotalOwned;
-				Func<double, bool> selector;
-				if ((selector = <>9__7) == null)
-				{
-					selector = (<>9__7 = ((double x) => this.Compare<double>(triggerData.Operator, x, threshold)));
-				}
+				Func<double, bool> selector = (((double x) => this.Compare<double>(triggerData.Operator, x, threshold)));
 				return totalOwned.Select(selector);
 			}).Switch<bool>().StartWith(false);
 		}
@@ -605,31 +602,22 @@ public class TriggerService : ITriggerService, IDisposable
 		VentureModel value2;
 		if (this.ventureMap.TryGetValue(triggerData.Id, out value2))
 		{
-			Func<bool, bool> <>9__4;
 			return (from v in this.ventureMap.ObserveAdd().StartWith(new DictionaryAddEvent<string, VentureModel>(triggerData.Id, value2))
 			where v.Key == triggerData.Id
 			select v).Select(delegate(DictionaryAddEvent<string, VentureModel> v)
 			{
 				IObservable<bool> isRunning = v.Value.IsRunning;
-				Func<bool, bool> selector;
-				if ((selector = <>9__4) == null)
-				{
-					selector = (<>9__4 = ((bool b) => b == value));
-				}
+				Func<bool, bool> selector= (bool b) => b == value;
 				return isRunning.Select(selector);
 			}).Switch<bool>().StartWith(false);
 		}
-		Func<bool, bool> <>9__5;
 		return (from v in this.ventureMap.ObserveAdd()
 		where v.Key == triggerData.Id
 		select v).Select(delegate(DictionaryAddEvent<string, VentureModel> v)
 		{
 			IObservable<bool> isRunning = v.Value.IsRunning;
 			Func<bool, bool> selector;
-			if ((selector = <>9__5) == null)
-			{
-				selector = (<>9__5 = ((bool b) => b == value));
-			}
+            selector = ((bool b) => b == value);
 			return isRunning.Select(selector);
 		}).Switch<bool>().StartWith(false);
 	}

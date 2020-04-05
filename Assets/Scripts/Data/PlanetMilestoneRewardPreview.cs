@@ -206,7 +206,7 @@ public class PlanetMilestoneRewardPreview : MonoBehaviour
 
 	// Token: 0x0400049F RID: 1183
 	[SerializeField]
-	private HHSlicedFilledImage HHSImg_ProgressBar;
+	private HhSlicedFilledImage HHSImg_ProgressBar;
 
 	// Token: 0x040004A0 RID: 1184
 	[SerializeField]

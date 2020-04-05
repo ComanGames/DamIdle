@@ -68,12 +68,6 @@ public static class VentureAdapter
 			}
 			view.HHSImg_ProgressBar.material.SetFloat("_ShowAnimTex", 0f);
 		}).AddTo(view.gameObject);
-		Func<float, bool> <>9__34;
-		Action<float> <>9__35;
-		Func<float, bool> <>9__36;
-		Action<float> <>9__37;
-		Func<float, bool> <>9__38;
-		Action<float> <>9__39;
 		model.IsRunning.Subscribe(delegate(bool running)
 		{
 			view.Img_HighlightFrame.enabled = !running;
@@ -82,17 +76,9 @@ public static class VentureAdapter
 			if (running)
 			{
 				IObservable<float> effectiveCoolDownTime = model.EffectiveCoolDownTime;
-				Func<float, bool> predicate;
-				if ((predicate = <>9__34) == null)
-				{
-					predicate = (<>9__34 = ((float _) => model.IsRunning.Value));
-				}
+                Func<float, bool> predicate = (f) => model.IsRunning.Value;
 				IObservable<float> source = effectiveCoolDownTime.TakeWhile(predicate);
-				Action<float> onNext;
-				if ((onNext = <>9__35) == null)
-				{
-					onNext = (<>9__35 = delegate(float time)
-					{
+				Action<float> onNext = (time) => { 
 						if (time < 0.2f)
 						{
 							view.HHSImg_ProgressBar.fillAmount = 1f;
@@ -101,21 +87,12 @@ public static class VentureAdapter
 							return;
 						}
 						view.HHSImg_ProgressBar.material.SetFloat("_ShowAnimTex", 0f);
-					});
-				}
+                };
 				source.Subscribe(onNext).AddTo(view.gameObject);
 				IObservable<float> progressTimer = model.ProgressTimer;
-				Func<float, bool> predicate2;
-				if ((predicate2 = <>9__36) == null)
-				{
-					predicate2 = (<>9__36 = ((float _) => model.IsRunning.Value));
-				}
+				Func<float, bool> predicate2 = (f)=>model.IsRunning.Value;
 				IObservable<float> source2 = progressTimer.TakeWhile(predicate2);
-				Action<float> onNext2;
-				if ((onNext2 = <>9__37) == null)
-				{
-					onNext2 = (<>9__37 = delegate(float progress)
-					{
+				Action<float> onNext2 = (progress) => { 
 						if (model.EffectiveCoolDownTime.Value >= 0.2f)
 						{
 							view.HHSImg_ProgressBar.fillAmount = progress / model.EffectiveCoolDownTime.Value;
@@ -124,24 +101,17 @@ public static class VentureAdapter
 							return;
 						}
 						view.RunTimer.text = "00:00:00";
-					});
-				}
+                };
 				source2.Subscribe(onNext2).AddTo(view.gameObject);
 				return;
 			}
 			view.HHSImg_ProgressBar.fillAmount = 0f;
 			view.HHSImg_ProgressBar.material.SetFloat("_ShowAnimTex", 0f);
 			IObservable<float> effectiveCoolDownTime2 = model.EffectiveCoolDownTime;
-			Func<float, bool> predicate3;
-			if ((predicate3 = <>9__38) == null)
-			{
-				predicate3 = (<>9__38 = ((float _) => !model.IsRunning.Value));
-			}
+			Func<float, bool> predicate3= (f) => !model.IsRunning.Value;
+
 			IObservable<float> source3 = effectiveCoolDownTime2.TakeWhile(predicate3);
-			Action<float> onNext3;
-			if ((onNext3 = <>9__39) == null)
-			{
-				onNext3 = (<>9__39 = delegate(float time)
+			Action<float> onNext3= (time)=>
 				{
 					if (model.EffectiveCoolDownTime.Value >= 0.2f)
 					{
@@ -150,9 +120,8 @@ public static class VentureAdapter
 						return;
 					}
 					view.RunTimer.text = "00:00:00";
-				});
-			}
-			source3.Subscribe(onNext3).AddTo(view.gameObject);
+				};
+        source3.Subscribe(onNext3).AddTo(view.gameObject);
 		}).AddTo(view.gameObject);
 		(from _ in view.RunIconButton.OnClickAsObservable().Merge(new IObservable<Unit>[]
 		{
@@ -250,7 +219,6 @@ public static class VentureAdapter
 		view.IconAnimator.Init(sprites);
 		view.Img_IconLocked.sprite = sprites[0];
 		view.Img_IconUnlocked.sprite = sprites[0];
-		Action <>9__40;
 		(from _ in view.BuyBoostBannerButton.OnClickAsObservable().Merge(new IObservable<Unit>[]
 		{
 			view.BuyBoostCertificateButton.OnClickAsObservable()
@@ -263,14 +231,7 @@ public static class VentureAdapter
 			PopupModal popupModal = GameController.Instance.NavigationService.CreateModal<PopupModal>(NavModals.POPUP, false);
 			string title = text;
 			string body = text2;
-			Action okCallback;
-			if ((okCallback = <>9__40) == null)
-			{
-				okCallback = (<>9__40 = delegate()
-				{
-					boostVentureAction(model);
-				});
-			}
+            Action okCallback = () => boostVentureAction(model);
 			popupModal.WireData(title, body, okCallback, PopupModal.PopupOptions.OK_Cancel, "Yes", "No", true, null, "");
 		}).AddTo(view.gameObject);
 		(from _ in view.UnpurchasedStateButton.OnClickAsObservable()

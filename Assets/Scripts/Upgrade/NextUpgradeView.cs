@@ -2,6 +2,7 @@
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
+using Object = UnityEngine.Object;
 
 // Token: 0x020001E2 RID: 482
 public class NextUpgradeView : MonoBehaviour
@@ -31,7 +32,7 @@ public class NextUpgradeView : MonoBehaviour
 	// Token: 0x06000E10 RID: 3600 RVA: 0x0003ECA1 File Offset: 0x0003CEA1
 	private void OnReset()
 	{
-		Object.Destroy(base.gameObject);
+        Object.Destroy(base.gameObject);
 	}
 
 	// Token: 0x06000E11 RID: 3601 RVA: 0x0003ECB0 File Offset: 0x0003CEB0

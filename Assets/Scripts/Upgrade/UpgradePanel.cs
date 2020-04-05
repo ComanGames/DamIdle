@@ -4,6 +4,7 @@ using System.Linq;
 using ListContentPools;
 using UniRx;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 // Token: 0x02000117 RID: 279
 public class UpgradePanel : PanelBaseClass

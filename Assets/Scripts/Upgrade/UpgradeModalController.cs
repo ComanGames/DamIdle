@@ -33,42 +33,24 @@ public class UpgradeModalController : ModalController
 		if (isOn)
 		{
 			UpgradeService upgradeService = GameController.Instance.UpgradeService;
-			Func<KeyValuePair<string, CanvasGroup>, bool> <>9__1;
-			Func<Upgrade, bool> <>9__2;
-			Func<Upgrade, bool> <>9__3;
 			GameController.Instance.PlanetThemeService.VentureIcons.Subscribe(delegate(IconDataScriptableObject iconData)
 			{
-				IEnumerable<KeyValuePair<string, CanvasGroup>> panelMap = this.panelMap;
-				Func<KeyValuePair<string, CanvasGroup>, bool> predicate;
-				if ((predicate = <>9__1) == null)
-				{
-					predicate = (<>9__1 = ((KeyValuePair<string, CanvasGroup> panel) => panel.Value == cGroup));
-				}
+				Func<KeyValuePair<string, CanvasGroup>, bool> predicate= ( panel) => panel.Value == cGroup;
+
 				string key = panelMap.FirstOrDefault(predicate).Key;
 				if (key == "Cash")
 				{
 					IEnumerable<Upgrade> upgrades = upgradeService.Upgrades;
-					Func<Upgrade, bool> predicate2;
-					if ((predicate2 = <>9__2) == null)
-					{
-						predicate2 = (<>9__2 = ((Upgrade x) => x.currency == this.cashUpgradePanel.CurrencyType));
-					}
+					Func<Upgrade, bool> predicate2=(Upgrade x) => x.currency == this.cashUpgradePanel.CurrencyType;
+
 					List<Upgrade> source = upgrades.Where(predicate2).ToList<Upgrade>();
 					this.cashUpgradePanel.WireData(source.ToList<Upgrade>(), iconData, upgradeService.QuikBuyUnlocked);
 					this.ClearUpgradeAvailable(Upgrade.Currency.InGameCash);
 					return;
 				}
-				if (!(key == "Angels"))
-				{
-					key == "Store";
-					return;
-				}
+
 				IEnumerable<Upgrade> upgrades2 = upgradeService.Upgrades;
-				Func<Upgrade, bool> predicate3;
-				if ((predicate3 = <>9__3) == null)
-				{
-					predicate3 = (<>9__3 = ((Upgrade x) => x.currency == this.angelUpgradePanel.CurrencyType));
-				}
+                Func<Upgrade, bool> predicate3 = (Upgrade x) => x.currency == this.angelUpgradePanel.CurrencyType;
 				List<Upgrade> source2 = upgrades2.Where(predicate3).ToList<Upgrade>();
 				this.angelUpgradePanel.WireData(source2.ToList<Upgrade>(), iconData, upgradeService.QuikBuyUnlocked);
 				this.ClearUpgradeAvailable(Upgrade.Currency.AngelInvestors);

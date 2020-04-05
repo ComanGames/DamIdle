@@ -168,11 +168,11 @@ public class PlanetMilestoneRewardsListItem : MonoBehaviour
 
 	// Token: 0x040004B9 RID: 1209
 	[SerializeField]
-	private HHSlicedFilledImage HHSImg_ProgressBar;
+	private HhSlicedFilledImage HHSImg_ProgressBar;
 
 	// Token: 0x040004BA RID: 1210
 	[SerializeField]
-	private HHSlicedFilledImage HHSImg_PrefillProgressBar;
+	private HhSlicedFilledImage HHSImg_PrefillProgressBar;
 
 	// Token: 0x040004BB RID: 1211
 	[SerializeField]
