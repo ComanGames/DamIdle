@@ -1,5 +1,4 @@
 ﻿using System;
-using AdCap.Ads;
 using HHTools.Navigation;
 using Platforms;
 using Platforms.Ad;
@@ -17,25 +16,12 @@ public class AdHocRewardPanel : AnimatedModal
 		this.btn_WatchAd.OnClickAsObservable().Subscribe(new Action<Unit>(this.OnWatchAdClicked)).AddTo(base.gameObject);
 		this.btn_Close.OnClickAsObservable().Subscribe(new Action<Unit>(this.SkipAdhoc)).AddTo(base.gameObject);
 		this.adWatchService = this.gameController.AdWatchService;
-		this.adHocRewardService = this.gameController.AdHocRewardService;
 		base.Awake();
 	}
 
 	// Token: 0x06000C5C RID: 3164 RVA: 0x0003791C File Offset: 0x00035B1C
 	public void WireData()
 	{
-		RewardData value = this.adHocRewardService.CurrentReward.Value;
-		Item itemById = this.gameController.GlobalPlayerData.inventory.GetItemById(value.Id);
-		if (itemById != null)
-		{
-			this.txt_RewardDescription.text = string.Format("{0} {1}", value.Qty, itemById.ItemName);
-			this.img_Reward.sprite = Resources.Load<Sprite>(itemById.GetPathToIcon());
-			return;
-		}
-		Debug.LogErrorFormat("Could not find reward [{0}] for ForAdHocrewardPanel", new object[]
-		{
-			value.Id
-		});
 	}
 
 	// Token: 0x06000C5D RID: 3165 RVA: 0x000379B0 File Offset: 0x00035BB0
@@ -60,14 +46,6 @@ public class AdHocRewardPanel : AnimatedModal
 	// Token: 0x06000C5F RID: 3167 RVA: 0x00037AD4 File Offset: 0x00035CD4
 	private void OnAdWatchSuccess(Unit u)
 	{
-		RewardData value = this.adHocRewardService.CurrentReward.Value;
-		string reward = string.Format("AdHoc {0}x{1}", value.Id, value.Qty);
-		this.gameController.AnalyticService.SendAdFinished("AdHoc", "Rewarded Video", this.gameController.game.planetName, reward);
-		if (this.gameController.GrantRewardService.GrantReward(value, "AdHoc", "AdHoc Reward", false) != null)
-		{
-			this.adHocRewardService.OnAdHocWatched();
-			this.CloseModal(u);
-		}
 	}
 
 	// Token: 0x06000C60 RID: 3168 RVA: 0x00037B6C File Offset: 0x00035D6C
@@ -128,8 +106,6 @@ public class AdHocRewardPanel : AnimatedModal
 	// Token: 0x04000A91 RID: 2705
 	private AdWatchService adWatchService;
 
-	// Token: 0x04000A92 RID: 2706
-	private AdHocRewardService adHocRewardService;
 
 	// Token: 0x04000A93 RID: 2707
 	private IGameController gameController;

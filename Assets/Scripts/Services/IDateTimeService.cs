@@ -21,8 +21,6 @@ public interface IDateTimeService : IDisposable
 	void Init(PlatformAccount pAccount);
 
 	// Token: 0x06000482 RID: 1154
-	IObservable<Unit> ForceServerTimeUpdate();
-
 	// Token: 0x06000483 RID: 1155
 	void SetNow(DateTime now);
 

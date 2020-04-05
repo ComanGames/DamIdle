@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using AdCap.Ads;
 using AdCap.Store;
 using UniRx;
 using Utils;

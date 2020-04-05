@@ -1,5 +1,4 @@
 ﻿using System;
-using AdCap.Ads;
 using HHTools.Navigation;
 using UniRx;
 using UnityEngine;

@@ -631,15 +631,8 @@ public class GameState
 		{
 			value = "male";
 		}
-		GameController.Instance.CurrentGender.Value = (Gender)Enum.Parse(typeof(Gender), value);
 	}
 
-	// Token: 0x06000AB6 RID: 2742 RVA: 0x0003000C File Offset: 0x0002E20C
-	public void SwitchGender()
-	{
-		GameController.Instance.CurrentGender.Value = ((GameController.Instance.CurrentGender.Value == Gender.male) ? Gender.female : Gender.male);
-		PlayerData.GetPlayerData("Global").Set("gender", GameController.Instance.CurrentGender.Value.ToString());
-	}
 
 	// Token: 0x06000AB7 RID: 2743 RVA: 0x00030070 File Offset: 0x0002E270
 	public GameStateSaveData BuildGameStateSaveData()
@@ -656,7 +649,8 @@ public class GameState
 		where x.Earned.Value
 		select x).ToList<Unlock>()
 		select x.Save()).ToList<UnlockSaveData>();
-		List<PlanetMilestoneSaveData> milestones = (from milestone in GameController.Instance.PlanetMilestoneService.GetUserMilestonesForCurrentPlanet()
+		List<PlanetMilestoneSaveData> milestones = (from milestone 
+                in GameController.Instance.PlanetMilestoneService.GetUserMilestonesForCurrentPlanet()
 		select milestone.Save()).ToList<PlanetMilestoneSaveData>();
 		List<LastClaimedUnlockSaveData> list2 = new List<LastClaimedUnlockSaveData>();
 		List<SingleVentureUnlock> source = (from x in GameController.Instance.UnlockService.Unlocks.OfType<SingleVentureUnlock>()
@@ -792,7 +786,7 @@ public class GameState
 			}
 			RewardSerialInformation rewardSerialInformation = gameStateInfo.rewardSerialInformation[num];
 			string type = rewardSerialInformation.type;
-			uint num2 = <PrivateImplementationDetails>.ComputeStringHash(type);
+			uint num2 = (uint)(type).GetHashCode();
 			if (num2 <= 1609428040U)
 			{
 				if (num2 <= 163507718U)

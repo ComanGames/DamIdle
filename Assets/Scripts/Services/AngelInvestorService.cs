@@ -100,7 +100,6 @@ public class AngelInvestorService : IAngelInvestorService, IDisposable
 		(from message in MessageBroker.Default.Receive<InventoryEquipMessage>()
 		where message.item.ItemBonusTarget == ItemBonusTarget.Angel
 		select message).Subscribe(new Action<InventoryEquipMessage>(this.OnItemEquipStateChanged)).AddTo(this.disposables);
-		KongregateGameObject.isLoggedIntoKong.Subscribe(new Action<bool>(this.HandleKongLoginStatus)).AddTo(this.disposables);
 		this.gameController.OnLoadNewPlanetPre += this.OnLoadPlanetPre;
 	}
 
@@ -273,7 +272,6 @@ public class AngelInvestorService : IAngelInvestorService, IDisposable
 		this.AngelResetCount.Value = state.planetPlayerData.GetInt("ResetCount", 0);
 		this.AngelsDoubledNotification.Value = false;
 		this.FirstTimeAngelReset.Value = false;
-		this.CalculateKongAngelInvestorBonus(KongregateGameObject.isLoggedIntoKong.Value);
 		this.gameController.OnSoftResetPost -= this.HandleOnSoftResetPost;
 		this.gameController.OnSoftResetPost += this.HandleOnSoftResetPost;
 		foreach (Item item in this.gameController.GlobalPlayerData.inventory.GetAllEquippedItems())

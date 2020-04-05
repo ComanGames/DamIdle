@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using AdCap.Ads;
 using AdCap.Store;
 using HHTools.Navigation;
 using Platforms;
@@ -102,7 +101,7 @@ public class AdProfitBoostModal : AnimatedModal
 		}).AddTo(this.disposables);
 		this.profitBoostAdService.AdProfitBoostTimer.Subscribe(delegate(double x)
 		{
-			this.txt_subText.text = string.Format("{0} Remaining", x.ToCountdownTrim());
+			this.txt_subText.text = string.Format("{0} Remaining", Mathf.Round((float)(x*10))/10f);
 		}).AddTo(this.disposables);
 		this.txt_Message.text = string.Format("<color={0}>Watch another ad</color> to increase your \ntimer by {1} hours. It's frugal-licious.", this.greenTextHex, 4);
 		this.txt_WatchButton.text = "Watch More";
@@ -118,7 +117,7 @@ public class AdProfitBoostModal : AnimatedModal
 		}).AddTo(this.disposables);
 		this.profitBoostAdService.AdProfitBoostTimer.Subscribe(delegate(double x)
 		{
-			this.txt_subText.text = string.Format("{0} Remaining", x.ToCountdownTrim());
+			this.txt_subText.text = string.Format("{0} Remaining",Mathf.Round((float) x*10)/10f);
 		}).AddTo(this.disposables);
 		this.txt_Message.text = string.Format("<color={0}>Watch ads tomorrow</color> to refresh your \ntimer by {1} hours. It's frugal-licious.", this.greenTextHex, 4);
 		this.txt_WatchButton.text = "Continue";

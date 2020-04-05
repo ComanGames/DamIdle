@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using AdCap.Ads;
 using AdCap.Store;
-using Facebook.Unity;
 using UniRx;
 using UnityEngine;
 using Utils;

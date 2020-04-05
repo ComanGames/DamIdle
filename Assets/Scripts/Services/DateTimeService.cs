@@ -1,7 +1,5 @@
 ﻿using System;
 using Platforms;
-using PlayFab;
-using PlayFab.ClientModels;
 using UniRx;
 using UnityEngine;
 
@@ -59,45 +57,6 @@ public class DateTimeService : IDateTimeService, IDisposable
 		{
 			this.Update();
 		});
-		Action<Unit> <>9__2;
-		Action<Exception> <>9__3;
-		Observable.Interval(TimeSpan.FromMinutes(10.0)).StartWith(0L).Subscribe(delegate(long _)
-		{
-			IObservable<Unit> source = this.RetrieveAndUpdateUTCNowWithServerTime();
-			Action<Unit> onNext;
-			if ((onNext = <>9__2) == null)
-			{
-				onNext = (<>9__2 = delegate(Unit ___)
-				{
-					if (onComplete != null)
-					{
-						onComplete();
-					}
-					onComplete = null;
-					onError = null;
-				});
-			}
-			Action<Exception> onError2;
-			if ((onError2 = <>9__3) == null)
-			{
-				onError2 = (<>9__3 = delegate(Exception error)
-				{
-					if (onError != null)
-					{
-						onError();
-					}
-					onComplete = null;
-					onError = null;
-				});
-			}
-			source.Subscribe(onNext, onError2).AddTo(this.intervalDisposables);
-		}).AddTo(this.disposables);
-	}
-
-	// Token: 0x06000477 RID: 1143 RVA: 0x00017F56 File Offset: 0x00016156
-	public IObservable<Unit> ForceServerTimeUpdate()
-	{
-		return this.RetrieveAndUpdateUTCNowWithServerTime();
 	}
 
 	// Token: 0x06000478 RID: 1144 RVA: 0x00017F5E File Offset: 0x0001615E
@@ -112,30 +71,6 @@ public class DateTimeService : IDateTimeService, IDisposable
 	{
 		this.disposables.Dispose();
 		this.intervalDisposables.Dispose();
-	}
-
-	// Token: 0x0600047A RID: 1146 RVA: 0x00017F90 File Offset: 0x00016190
-	private IObservable<Unit> RetrieveAndUpdateUTCNowWithServerTime()
-	{
-		if (!this.platformAccount.IsLoggedIn)
-		{
-			Debug.LogError("[DateTimeService](SetNowWithServerTime) CLIENT IS NOT LOGGED IN!!!");
-		}
-		return Observable.Create<Unit>(delegate(IObserver<Unit> observer)
-		{
-			this.platformAccount.PlayFab.GetTime(delegate(GetTimeResult result)
-			{
-				this.SetNow(result.Time);
-				this.started = true;
-				this.starting = false;
-				observer.OnNext(Unit.Default);
-				observer.OnCompleted();
-			}, delegate(PlayFabError _)
-			{
-				observer.OnError(_.ToException());
-			});
-			return Disposable.Empty;
-		}).Retry(2);
 	}
 
 	// Token: 0x0600047B RID: 1147 RVA: 0x00017FC0 File Offset: 0x000161C0

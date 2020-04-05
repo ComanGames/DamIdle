@@ -3,6 +3,7 @@ using System.Linq;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
+using Object = UnityEngine.Object;
 
 // Token: 0x02000261 RID: 609
 public class VentureViewHack : MonoBehaviour

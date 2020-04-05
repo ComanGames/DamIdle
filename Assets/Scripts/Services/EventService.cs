@@ -285,20 +285,6 @@ public class EventService : IEventService, IDisposable
 	}
 
 	// Token: 0x060003DE RID: 990 RVA: 0x000150B8 File Offset: 0x000132B8
-	private void CreatePendingRewards(LeaderboardRankData eventData)
-	{
-		EventRewardTier rewardTierByRank = this.eventDataService.GetRewardTierByRank(eventData.eventId, eventData.leaderboardRank);
-		if (rewardTierByRank != null)
-		{
-			this.PendingEventRewards.Add(new PendingEventRewards
-			{
-				eventId = eventData.eventId,
-				rewardTier = rewardTierByRank
-			});
-			return;
-		}
-		Platforms.Logger.Logger.GetLogger(this).Warning("Error claiming rewards, no reward tiers found in the sheet for event " + eventData.eventId);
-	}
 
 	// Token: 0x060003DF RID: 991 RVA: 0x0001511F File Offset: 0x0001331F
 	private void OnPlayerRankError(Exception error)

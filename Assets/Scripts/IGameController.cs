@@ -1,6 +1,5 @@
 ﻿using System;
 using AdCap;
-using AdCap.Ads;
 using AdCap.Redemption;
 using AdCap.Store;
 using Platforms;

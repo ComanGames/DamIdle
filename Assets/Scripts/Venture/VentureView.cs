@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections;
-using DG.Tweening;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 // Token: 0x02000163 RID: 355
 public class VentureView : MonoBehaviour
@@ -53,8 +53,8 @@ public class VentureView : MonoBehaviour
 		this.Txt_NameLocked.text = this.venture.Name;
 		venture.IsRunning.Subscribe(delegate(bool x)
 		{
-			this.Twn_TapHighlight.DORestart(false);
-			this.Twn_TapHighlight.gameObject.SetActive(!x);
+            Debug.Log("Do some animation");
+
 		}).AddTo(base.gameObject);
 		this.venture.UnlocksToClaim.Subscribe(delegate(int x)
 		{
@@ -210,9 +210,6 @@ public class VentureView : MonoBehaviour
 	// Token: 0x0400099E RID: 2462
 	public RectTransform InfoContainer;
 
-	// Token: 0x0400099F RID: 2463
-	public DOTweenAnimation Twn_TapHighlight;
-
 	// Token: 0x040009A0 RID: 2464
 	public Image Img_HighlightFrame;
 
@@ -226,7 +223,7 @@ public class VentureView : MonoBehaviour
 	public Image Img_ProgressFrame;
 
 	// Token: 0x040009A4 RID: 2468
-	public HHSlicedFilledImage HHSImg_ProgressBar;
+	public Image HHSImg_ProgressBar;
 
 	// Token: 0x040009A5 RID: 2469
 	public Image Img_ProgressBarBG;

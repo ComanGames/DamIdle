@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using AdCap;
-using AdCap.Ads;
 using AdCap.Redemption;
 using AdCap.Store;
 using AdComm;
