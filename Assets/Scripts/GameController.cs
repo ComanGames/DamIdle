@@ -12,7 +12,6 @@ using Assets.Scripts.Utils;
 using HHTools.Navigation;
 using Platforms;
 using Platforms.Ad;
-using Platforms.Logger;
 using UniRx;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -542,6 +541,153 @@ public sealed class GameController : IGameController, IDisposable
         this.NavigationService.CloseAllModals();
         this.WaitThenLoad(planetName).ToObservable(false).StartAsCoroutine(default(CancellationToken));
     }
+    private IEnumerator WaitThenLoad(string planetName)
+    {
+        this.OnLoadNewPlanetPre();
+        LaunchingModal launchingmodal = this.NavigationService.CreateModal<LaunchingModal>(NavModals.LAUNCHING_MODAL, false);
+        yield return new WaitForSeconds(0.5f);
+        Action postLoadDelegate = delegate ()
+        {
+            this.OnLoadNewPlanetPost();
+            Resources.UnloadUnusedAssets();
+        };
+        this.SetPlanetName(planetName);
+        this.HhAssetBundleManager.GetBundleAsync("gamestate-" + this.planetName.ToLower()).Subscribe(delegate (IAssetBundle gameStateBundle)
+        {
+            GameState_Serialized[] array = gameStateBundle.LoadAllAssets<GameState_Serialized>();
+            if (array == null || array.Length == 0)
+            {
+                Platforms.Logger.Logger.GetLogger(this).Error("Failed to load gamestate data for " + this.planetName);
+                PopupModal popupModal = GameController.Instance.NavigationService.CreateModal<PopupModal>(NavModals.POPUP, false);
+                string title = "Error";
+                string body = "We ran into a problem loading the game state!";
+                Action okCallback =()=> this.LoadPlanetScene("Earth", false);
+                popupModal.WireData(title, body, okCallback, PopupModal.PopupOptions.OK, "Return to Earth", "", false, null, "");
+                return;
+            }
+            IEnumerable<GameState_Serialized> source = array;
+            Func<GameState_Serialized, bool> predicate =(GameState_Serialized x) => x.planetName == planetName;
+
+            nextGameStateSerialized = source.FirstOrDefault(predicate);
+            if (this.nextGameStateSerialized == null)
+            {
+                Platforms.Logger.Logger.GetLogger(this).Error("Failed to load gamestate data for " + this.planetName);
+                PopupModal popupModal2 = GameController.Instance.NavigationService.CreateModal<PopupModal>(NavModals.POPUP, false);
+                string title2 = "Error";
+                string body2 = "We ran into a problem loading the game state!!";
+                Action okCallback2 = ()=> this.LoadPlanetScene("Earth", false);
+                popupModal2.WireData(title2, body2, okCallback2, PopupModal.PopupOptions.OK, "Return to Earth", "", false, null, "");
+                return;
+            }
+            string planetTheme = this.nextGameStateSerialized.planetTheme;
+            string planetBundleId = this.planetName.ToLower();
+            if (GameState.IsEvent(planetName))
+            {
+                IEnumerable<EventModel> activeEvents = this.EventService.ActiveEvents;
+                Func<EventModel, bool> predicate2 = (EventModel x) => x.Id == planetName;
+                EventModel eventModel = activeEvents.FirstOrDefault(predicate2);
+                if (eventModel != null)
+                {
+                    planetBundleId = eventModel.PlanetTheme.ToLower();
+                }
+            }
+            IObservable<IAssetBundle> bundleAsync = this.HhAssetBundleManager.GetBundleAsync("planetdata-" + planetBundleId);
+            Action<IAssetBundle> onNext = delegate (IAssetBundle planetBundle)
+            {
+                PlanetData[] array2 = planetBundle.LoadAllAssets<PlanetData>();
+                if (array2 == null || array2.Length == 0)
+                {
+                    Platforms.Logger.Logger.GetLogger(this).Error("Failed to load planet data for " + this.planetName);
+                    PopupModal popupModal3 = GameController.Instance.NavigationService.CreateModal<PopupModal>(NavModals.POPUP, false);
+                    string title3 = "Error";
+                    string body3 = "We ran into a problem loading the planet data!";
+                    Action okCallback3 = ()=> this.LoadPlanetScene("Earth", false);
+                    popupModal3.WireData(title3, body3, okCallback3, PopupModal.PopupOptions.OK, "Return to Earth", "", false, null, "");
+                    return;
+                }
+                IEnumerable<PlanetData> source2 = array2;
+                Func<PlanetData, bool> predicate3 = ((PlanetData x) => x.PlanetName == planetTheme);
+
+                nextPlanetData = source2.FirstOrDefault(predicate3);
+
+                if (this.nextPlanetData == null)
+                {
+                    Platforms.Logger.Logger.GetLogger(this).Error("Failed to load planet data for " + this.planetName);
+                    PopupModal popupModal4 = GameController.Instance.NavigationService.CreateModal<PopupModal>(NavModals.POPUP, false);
+                    string title4 = "Error";
+                    string body4 = "We ran into a problem loading the planet data!!";
+                    Action okCallback4= ()=> this.LoadPlanetScene("Earth", false);
+                    popupModal4.WireData(title4, body4, okCallback4, PopupModal.PopupOptions.OK, "Return to Earth", "", false, null, "");
+                    return;
+                }
+                string bundleName = "planettheme-" + planetBundleId;
+                IObservable<IAssetBundle> bundleAsync2 = this.HhAssetBundleManager.GetBundleAsync(bundleName);
+                Action<IAssetBundle> onNext2 = delegate (IAssetBundle themeBundle)
+                {
+                    this.PlanetThemeService.UpdateAssetBundle(themeBundle, bundleName);
+                    SceneManager.LoadScene("Main");
+                    IObservable<Unit> source3 = Observable.NextFrame(FrameCountType.FixedUpdate);
+                    Action<Unit> onNext3 = (Unit u )=>
+                        {
+                            postLoadDelegate();
+                            launchingmodal.CloseModal(Unit.Default);
+                        };
+                    source3.Subscribe(onNext3);
+                    this.AnalyticService.SendTaskCompleteEvent("Blastoff", this.planetName, this.planetName);
+                };
+                Action<Exception> onError2 = (Exception e) =>
+                {
+                    Platforms.Logger.Logger.GetLogger(this).Error(e.Message);
+                    PopupModal popupModal5 =
+                        GameController.Instance.NavigationService.CreateModal<PopupModal>(NavModals.POPUP, false);
+                    string title5 = "Error";
+                    string body5 = "We ran into a problem loading the planet! Please check your connection and try again!";
+
+                    Action okCallback5 =() => this.LoadPlanetScene("Earth", false);
+                    PopupModal.PopupOptions options = PopupModal.PopupOptions.Two_Green_Buttons;
+                    string confirmButtonText = "Return to Earth";
+                    string cancelButtonText = "Retry";
+                    bool showClose = false;
+                    Action cancelCallback = ()=> this.LoadPlanetScene(this.planetName, false);
+                    popupModal5.WireData(title5, body5, okCallback5, options, confirmButtonText, cancelButtonText,
+                        showClose, cancelCallback, "");
+                };
+                bundleAsync2.Subscribe(onNext2, onError2);
+            };
+            Action<Exception> onError = (Exception exception) =>
+            {
+
+                Platforms.Logger.Logger.GetLogger(this).Error(exception.Message);
+                PopupModal popupModal3 =
+                    GameController.Instance.NavigationService.CreateModal<PopupModal>(NavModals.POPUP, false);
+                string title3 = "Error";
+                string body3 = "We ran into a problem loading the planet. Please check your connection and try again!";
+                Action okCallback3 = () => this.LoadPlanetScene("Earth", false);
+                PopupModal.PopupOptions options = PopupModal.PopupOptions.Two_Green_Buttons;
+                string confirmButtonText = "Return to Earth";
+                string cancelButtonText = "Retry";
+                bool showClose = false;
+                Action cancelCallback = () => this.LoadPlanetScene(this.planetName, false);
+                popupModal3.WireData(title3, body3, okCallback3, options, confirmButtonText, cancelButtonText,
+                    showClose, cancelCallback, "");
+
+            };
+            bundleAsync.Subscribe(onNext, onError);
+        }, delegate (Exception exception)
+        {
+            Platforms.Logger.Logger.GetLogger(this).Error(exception.Message);
+            PopupModal popupModal = GameController.Instance.NavigationService.CreateModal<PopupModal>(NavModals.POPUP, false);
+            string title = "Error";
+            string body = "We ran into a problem loading the planet. Please check your connection and try again!";
+            Action okCallback = ()=> this.LoadPlanetScene("Earth", false);
+            PopupModal.PopupOptions options = PopupModal.PopupOptions.Two_Green_Buttons;
+            string confirmButtonText = "Return to Earth";
+            string cancelButtonText = "Retry";
+            bool showClose = false;
+            Action cancelCallback = ()=> this.LoadPlanetScene(this.planetName, false);
+            popupModal.WireData(title, body, okCallback, options, confirmButtonText, cancelButtonText, showClose, cancelCallback, "");
+        });
+    }
 
     // Token: 0x06000A53 RID: 2643 RVA: 0x0002D6C0 File Offset: 0x0002B8C0
     public void HardResetPlanetOnComplete()
@@ -643,249 +789,7 @@ public sealed class GameController : IGameController, IDisposable
     }
 
     // Token: 0x06000A59 RID: 2649 RVA: 0x0002DA89 File Offset: 0x0002BC89
-    private IEnumerator WaitThenLoad(string planetName)
-    {
-        this.logger.Trace("Loading planet {0}", new object[]
-        {
-            planetName
-        });
-        this.OnLoadNewPlanetPre();
-        LaunchingModal launchingmodal = this.NavigationService.CreateModal<LaunchingModal>(NavModals.LAUNCHING_MODAL, false);
-        yield return new WaitForSeconds(0.5f);
-        Action postLoadDelegate = delegate ()
-        {
-            this.OnLoadNewPlanetPost();
-            Resources.UnloadUnusedAssets();
-        };
-        this.SetPlanetName(planetName);
-        this.HhAssetBundleManager.GetBundleAsync("gamestate-" + this.planetName.ToLower()).Subscribe(delegate (IAssetBundle gameStateBundle)
-        {
-            GameState_Serialized[] array = gameStateBundle.LoadAllAssets<GameState_Serialized>();
-            if (array == null || array.Length == 0)
-            {
-                Platforms.Logger.Logger.GetLogger(this).Error("Failed to load gamestate data for " + this.planetName);
-                PopupModal popupModal = GameController.Instance.NavigationService.CreateModal<PopupModal>(NavModals.POPUP, false);
-                string title = "Error";
-                string body = "We ran into a problem loading the game state!";
-                Action okCallback;
-                if ((okCallback = <> 9__4) == null)
-                {
-                    okCallback = (<> 9__4 = delegate ()
-                    {
-                        this.LoadPlanetScene("Earth", false);
-                    });
-                }
-                popupModal.WireData(title, body, okCallback, PopupModal.PopupOptions.OK, "Return to Earth", "", false, null, "");
-                return;
-            }
-            GameController <> 4__this = this;
-            IEnumerable<GameState_Serialized> source = array;
-            Func<GameState_Serialized, bool> predicate;
-            if ((predicate = <> 9__3) == null)
-            {
-                predicate = (<> 9__3 = ((GameState_Serialized x) => x.planetName == planetName));
-            }
-
-            <> 4__this.nextGameStateSerialized = source.FirstOrDefault(predicate);
-            if (this.nextGameStateSerialized == null)
-            {
-                Platforms.Logger.Logger.GetLogger(this).Error("Failed to load gamestate data for " + this.planetName);
-                PopupModal popupModal2 = GameController.Instance.NavigationService.CreateModal<PopupModal>(NavModals.POPUP, false);
-                string title2 = "Error";
-                string body2 = "We ran into a problem loading the game state!!";
-                Action okCallback2;
-                if ((okCallback2 = <> 9__5) == null)
-                {
-                    okCallback2 = (<> 9__5 = delegate ()
-                    {
-                        this.LoadPlanetScene("Earth", false);
-                    });
-                }
-                popupModal2.WireData(title2, body2, okCallback2, PopupModal.PopupOptions.OK, "Return to Earth", "", false, null, "");
-                return;
-            }
-            string planetTheme = this.nextGameStateSerialized.planetTheme;
-            string planetBundleId = this.planetName.ToLower();
-            if (GameState.IsEvent(planetName))
-            {
-                IEnumerable<EventModel> activeEvents = this.EventService.ActiveEvents;
-                Func<EventModel, bool> predicate2;
-                if ((predicate2 = <> 9__8) == null)
-                {
-                    predicate2 = (<> 9__8 = ((EventModel x) => x.Id == planetName));
-                }
-                EventModel eventModel = activeEvents.FirstOrDefault(predicate2);
-                if (eventModel != null)
-                {
-                    planetBundleId = eventModel.PlanetTheme.ToLower();
-                }
-            }
-            IObservable<IAssetBundle> bundleAsync = this.HhAssetBundleManager.GetBundleAsync("planetdata-" + planetBundleId);
-            Func<PlanetData, bool> <> 9__9;
-            Action<IAssetBundle> onNext = delegate (IAssetBundle planetBundle)
-            {
-                PlanetData[] array2 = planetBundle.LoadAllAssets<PlanetData>();
-                if (array2 == null || array2.Length == 0)
-                {
-                    Platforms.Logger.Logger.GetLogger(this).Error("Failed to load planet data for " + this.planetName);
-                    PopupModal popupModal3 = GameController.Instance.NavigationService.CreateModal<PopupModal>(NavModals.POPUP, false);
-                    string title3 = "Error";
-                    string body3 = "We ran into a problem loading the planet data!";
-                    Action okCallback3;
-                    if ((okCallback3 = <> 9__10) == null)
-                    {
-                        okCallback3 = (<> 9__10 = delegate ()
-                        {
-                            this.LoadPlanetScene("Earth", false);
-                        });
-                    }
-                    popupModal3.WireData(title3, body3, okCallback3, PopupModal.PopupOptions.OK, "Return to Earth", "", false, null, "");
-                    return;
-                }
-                GameController <> 4__this2 = this;
-                IEnumerable<PlanetData> source2 = array2;
-                Func<PlanetData, bool> predicate3;
-                if ((predicate3 = <> 9__9) == null)
-                {
-                    predicate3 = (<> 9__9 = ((PlanetData x) => x.PlanetName == planetTheme));
-                }
-
-                <> 4__this2.nextPlanetData = source2.FirstOrDefault(predicate3);
-                if (this.nextPlanetData == null)
-                {
-                    Platforms.Logger.Logger.GetLogger(this).Error("Failed to load planet data for " + this.planetName);
-                    PopupModal popupModal4 = GameController.Instance.NavigationService.CreateModal<PopupModal>(NavModals.POPUP, false);
-                    string title4 = "Error";
-                    string body4 = "We ran into a problem loading the planet data!!";
-                    Action okCallback4;
-                    if ((okCallback4 = <> 9__11) == null)
-                    {
-                        okCallback4 = (<> 9__11 = delegate ()
-                        {
-                            this.LoadPlanetScene("Earth", false);
-                        });
-                    }
-                    popupModal4.WireData(title4, body4, okCallback4, PopupModal.PopupOptions.OK, "Return to Earth", "", false, null, "");
-                    return;
-                }
-                string bundleName = "planettheme-" + planetBundleId;
-                IObservable<IAssetBundle> bundleAsync2 = this.HhAssetBundleManager.GetBundleAsync(bundleName);
-                Action<IAssetBundle> onNext2 = delegate (IAssetBundle themeBundle)
-                {
-                    this.PlanetThemeService.UpdateAssetBundle(themeBundle, bundleName);
-                    SceneManager.LoadScene("Main");
-                    IObservable<Unit> source3 = Observable.NextFrame(FrameCountType.FixedUpdate);
-                    Action<Unit> onNext3;
-                    if ((onNext3 = <> 9__14) == null)
-                    {
-                        onNext3 = (<> 9__14 = delegate (Unit _)
-                        {
-                            postLoadDelegate();
-                            launchingmodal.CloseModal(Unit.Default);
-                        });
-                    }
-                    source3.Subscribe(onNext3);
-                    this.AnalyticService.SendTaskCompleteEvent("Blastoff", this.planetName, this.planetName);
-                };
-                Action<Exception> onError2;
-                if ((onError2 = <> 9__13) == null)
-                {
-                    onError2 = (<> 9__13 = delegate (Exception exception)
-                    {
-                        Platforms.Logger.Logger.GetLogger(this).Error(exception.Message);
-                        PopupModal popupModal5 = GameController.Instance.NavigationService.CreateModal<PopupModal>(NavModals.POPUP, false);
-                        string title5 = "Error";
-                        string body5 = "We ran into a problem loading the planet! Please check your connection and try again!";
-                        Action okCallback5;
-                        if ((okCallback5 = <> 9__15) == null)
-                        {
-                            okCallback5 = (<> 9__15 = delegate ()
-                            {
-                                this.LoadPlanetScene("Earth", false);
-                            });
-                        }
-                        PopupModal.PopupOptions options = PopupModal.PopupOptions.Two_Green_Buttons;
-                        string confirmButtonText = "Return to Earth";
-                        string cancelButtonText = "Retry";
-                        bool showClose = false;
-                        Action cancelCallback;
-                        if ((cancelCallback = <> 9__16) == null)
-                        {
-                            cancelCallback = (<> 9__16 = delegate ()
-                            {
-                                this.LoadPlanetScene(this.planetName, false);
-                            });
-                        }
-                        popupModal5.WireData(title5, body5, okCallback5, options, confirmButtonText, cancelButtonText, showClose, cancelCallback, "");
-                    });
-                }
-                bundleAsync2.Subscribe(onNext2, onError2);
-            };
-            Action<Exception> onError;
-            if ((onError = <> 9__7) == null)
-            {
-                onError = (<> 9__7 = delegate (Exception exception)
-                {
-                    Platforms.Logger.Logger.GetLogger(this).Error(exception.Message);
-                    PopupModal popupModal3 = GameController.Instance.NavigationService.CreateModal<PopupModal>(NavModals.POPUP, false);
-                    string title3 = "Error";
-                    string body3 = "We ran into a problem loading the planet. Please check your connection and try again!";
-                    Action okCallback3;
-                    if ((okCallback3 = <> 9__17) == null)
-                    {
-                        okCallback3 = (<> 9__17 = delegate ()
-                        {
-                            this.LoadPlanetScene("Earth", false);
-                        });
-                    }
-                    PopupModal.PopupOptions options = PopupModal.PopupOptions.Two_Green_Buttons;
-                    string confirmButtonText = "Return to Earth";
-                    string cancelButtonText = "Retry";
-                    bool showClose = false;
-                    Action cancelCallback;
-                    if ((cancelCallback = <> 9__18) == null)
-                    {
-                        cancelCallback = (<> 9__18 = delegate ()
-                        {
-                            this.LoadPlanetScene(this.planetName, false);
-                        });
-                    }
-                    popupModal3.WireData(title3, body3, okCallback3, options, confirmButtonText, cancelButtonText, showClose, cancelCallback, "");
-                });
-            }
-            bundleAsync.Subscribe(onNext, onError);
-        }, delegate (Exception exception)
-        {
-            Platforms.Logger.Logger.GetLogger(this).Error(exception.Message);
-            PopupModal popupModal = GameController.Instance.NavigationService.CreateModal<PopupModal>(NavModals.POPUP, false);
-            string title = "Error";
-            string body = "We ran into a problem loading the planet. Please check your connection and try again!";
-            Action okCallback;
-            if ((okCallback = <> 9__19) == null)
-            {
-                okCallback = (<> 9__19 = delegate ()
-                {
-                    this.LoadPlanetScene("Earth", false);
-                });
-            }
-            PopupModal.PopupOptions options = PopupModal.PopupOptions.Two_Green_Buttons;
-            string confirmButtonText = "Return to Earth";
-            string cancelButtonText = "Retry";
-            bool showClose = false;
-            Action cancelCallback;
-            if ((cancelCallback = <> 9__20) == null)
-            {
-                cancelCallback = (<> 9__20 = delegate ()
-                {
-                    this.LoadPlanetScene(this.planetName, false);
-                });
-            }
-            popupModal.WireData(title, body, okCallback, options, confirmButtonText, cancelButtonText, showClose, cancelCallback, "");
-        });
-        yield break;
-    }
-
-    // Token: 0x06000A5A RID: 2650 RVA: 0x0002DA9F File Offset: 0x0002BC9F
+       // Token: 0x06000A5A RID: 2650 RVA: 0x0002DA9F File Offset: 0x0002BC9F
     private void SetPlanetName(string newPlanetName)
     {
         this.lastPlanetName = this.planetName;
@@ -917,7 +821,6 @@ public sealed class GameController : IGameController, IDisposable
                 this.game.planetPlayerData.Remove("MegaBucksBalance");
                 this.GlobalPlayerData.Add("MegaBucksBalance", (double)@int);
             }
-            this.CancelNotifications();
             this.SetupStreams();
             bool flag = false;
             foreach (Item item in this.GlobalPlayerData.inventory.GetAllEquippedItems())
@@ -1025,10 +928,6 @@ public sealed class GameController : IGameController, IDisposable
         else
         {
             this.GlobalPlayerData.Add(GameController.SESSION_COUNT_KEY, 1.0);
-            if (this.GlobalPlayerData.GetInt(GameController.SESSION_COUNT_KEY, 0) == 10)
-            {
-                this.AnalyticService.SendAdjustAnalyticEvent(KongregateGameObject.ADJUST_KONG_10TH_SESSION_KEY, null);
-            }
         }
         if (!this.GlobalPlayerData.Has("Gold"))
         {
@@ -1081,7 +980,6 @@ public sealed class GameController : IGameController, IDisposable
             this.SaveGame(this.game.timestamp);
             return;
         }
-        this.CancelNotifications();
         this.LogTimerDebugging("OnUnpause force time update");
         this.DateTimeService.ForceServerTimeUpdate().Subscribe(delegate (Unit _)
         {
@@ -1109,24 +1007,6 @@ public sealed class GameController : IGameController, IDisposable
         this.Dispose();
     }
 
-    // Token: 0x06000A62 RID: 2658 RVA: 0x0002E074 File Offset: 0x0002C274
-    private void SetupNotifications()
-    {
-        Notifications.ScheduleDaysNotification(this.game, 3);
-        Notifications.ScheduleDaysNotification(this.game, 7);
-        Notifications.ScheduleDaysNotification(this.game, 14);
-        Notifications.ScheduleDaysNotification(this.game, 31);
-        Notifications.ScheduleAdBonusEndNotification(this.game);
-        Notifications.ScheduleDoubleAngelsNotification(this.game);
-        Notifications.ScheduleMissionEventBonusTaskNotifications(this.game);
-        Notifications.ScheduleEndOfOfferNotification(this.game);
-    }
-
-    // Token: 0x06000A63 RID: 2659 RVA: 0x0002E0DF File Offset: 0x0002C2DF
-    private void CancelNotifications()
-    {
-        Notifications.ClearAllNotifications();
-    }
 
     // Token: 0x06000A64 RID: 2660 RVA: 0x0002E0E6 File Offset: 0x0002C2E6
     private IEnumerator CalculateElapsedOfflineTime()
