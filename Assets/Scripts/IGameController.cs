@@ -6,70 +6,34 @@ using AdCap.Store;
 using Platforms;
 using Utils;
 
-// Token: 0x0200015C RID: 348
 public interface IGameController : IDisposable
 {
-    // Token: 0x14000061 RID: 97
-    // (add) Token: 0x06000AD0 RID: 2768
-    // (remove) Token: 0x06000AD1 RID: 2769
     event Action OnSoftResetPre;
 
-    // Token: 0x14000062 RID: 98
-    // (add) Token: 0x06000AD2 RID: 2770
-    // (remove) Token: 0x06000AD3 RID: 2771
     event Action OnSoftResetPost;
 
-    // Token: 0x14000063 RID: 99
-    // (add) Token: 0x06000AD4 RID: 2772
-    // (remove) Token: 0x06000AD5 RID: 2773
     event Action OnHardResetPre;
 
-    // Token: 0x14000064 RID: 100
-    // (add) Token: 0x06000AD6 RID: 2774
-    // (remove) Token: 0x06000AD7 RID: 2775
     event Action OnHardResetPost;
 
-    // Token: 0x14000065 RID: 101
-    // (add) Token: 0x06000AD8 RID: 2776
-    // (remove) Token: 0x06000AD9 RID: 2777
     event Action OnLoadNewPlanetPre;
 
-    // Token: 0x14000066 RID: 102
-    // (add) Token: 0x06000ADA RID: 2778
-    // (remove) Token: 0x06000ADB RID: 2779
     event Action OnLoadNewPlanetPost;
 
-    // Token: 0x14000067 RID: 103
-    // (add) Token: 0x06000ADC RID: 2780
-    // (remove) Token: 0x06000ADD RID: 2781
     event Action OnPreSavePlanetData;
 
-    // Token: 0x170000D4 RID: 212
-    // (get) Token: 0x06000ADE RID: 2782
     IUserDataService UserDataService { get; }
 
-    // Token: 0x170000D5 RID: 213
-    // (get) Token: 0x06000ADF RID: 2783
     UpgradeService UpgradeService { get; }
 
-    // Token: 0x170000D6 RID: 214
-    // (get) Token: 0x06000AE0 RID: 2784
     UnlockService UnlockService { get; }
 
-    // Token: 0x170000D7 RID: 215
-    // (get) Token: 0x06000AE1 RID: 2785
     IEventService EventService { get; }
 
-    // Token: 0x170000D8 RID: 216
-    // (get) Token: 0x06000AE2 RID: 2786
     IEventDataService EventDataService { get; }
 
-    // Token: 0x170000D9 RID: 217
-    // (get) Token: 0x06000AE3 RID: 2787
     IDateTimeService DateTimeService { get; }
 
-    // Token: 0x170000DA RID: 218
-    // (get) Token: 0x06000AE4 RID: 2788
     DataService DataService { get; }
 
     // Token: 0x170000DB RID: 219
