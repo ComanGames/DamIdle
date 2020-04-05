@@ -114,7 +114,5 @@ public static class GameStateSaveLoad
 	}
 
 	// Token: 0x04000941 RID: 2369
-	private static Action<string, string> PlatformSpecificSave = delegate(string <p0>, string <p1>)
-	{
-	};
+    private static Action<string, string> PlatformSpecificSave = delegate(string a, string b) { };
 }
