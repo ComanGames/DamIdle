@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using AdComm.AssetBundles;
+using AdComm;
 using UniRx;
 using UnityEngine;
 
