@@ -27,7 +27,7 @@ public interface IEventService : IDisposable
 	ReactiveCollection<EventModel> PastEvents { get; }
 
 	// Token: 0x06000402 RID: 1026
-	void Init(IGameController gameController, IEventDataService eventDataService, IEventServiceServerRequests eventServiceServerRequests, IDateTimeService dateTimeService, ITriggerService triggerService, ILeaderboardService leaderboardService, TimerService timerService, IUserDataService userDataService);
+	void Init(IGameController gameController, IEventDataService eventDataService, IEventServiceServerRequests eventServiceServerRequests, IDateTimeService dateTimeService, ITriggerService triggerService,  TimerService timerService, IUserDataService userDataService);
 
 	// Token: 0x06000403 RID: 1027
 	void OnRewardsClaimed(string eventId);

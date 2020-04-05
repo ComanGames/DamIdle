@@ -54,14 +54,13 @@ public class EventService : IEventService, IDisposable
 	}
 
 	// Token: 0x060003CD RID: 973 RVA: 0x00014924 File Offset: 0x00012B24
-	public void Init(IGameController gameController, IEventDataService eventDataService, IEventServiceServerRequests eventServiceServerRequests, IDateTimeService dateTimeService, ITriggerService triggerService, ILeaderboardService leaderboardService, TimerService timerService, IUserDataService userDataService)
+	public void Init(IGameController gameController, IEventDataService eventDataService, IEventServiceServerRequests eventServiceServerRequests, IDateTimeService dateTimeService, ITriggerService triggerService, TimerService timerService, IUserDataService userDataService)
 	{
 		this.gameController = gameController;
 		this.eventDataService = eventDataService;
 		this.eventServiceServerRequests = eventServiceServerRequests;
 		this.dateTimeService = dateTimeService;
 		this.triggerService = triggerService;
-		this.leaderboardService = leaderboardService;
 		this.timerService = timerService;
 		this.userDataService = userDataService;
 		this.LoadEnrolledEvents();
@@ -148,7 +147,7 @@ public class EventService : IEventService, IDisposable
 		int angelsLeaderboardScore = this.gameController.game.GetAngelsLeaderboardScore();
 		string eventId = this.gameController.game.planetName;
 		EventData eventData = this.eventDataService.EventDataList.FirstOrDefault((EventData x) => x.id == eventId);
-		this.leaderboardService.PostLeaderboardValue(eventId, eventData.leaderboardType, eventData.leaderboardSize, angelsLeaderboardScore).Take(1).Subscribe(new Action<Tuple<string, int>>(this.OnPostLeaderboardValueSuccess), new Action<Exception>(this.OnPostLeaderboardValueError)).AddTo(this.disposables);
+//		this.leaderboardService.PostLeaderboardValue(eventId, eventData.leaderboardType, eventData.leaderboardSize, angelsLeaderboardScore).Take(1).Subscribe(new Action<Tuple<string, int>>(this.OnPostLeaderboardValueSuccess), new Action<Exception>(this.OnPostLeaderboardValueError)).AddTo(this.disposables);
 		this.enrolledEventList.Add(this.gameController.game.planetName);
 		this.SaveEnrolledEvents();
 	}
@@ -158,7 +157,7 @@ public class EventService : IEventService, IDisposable
 	{
 		string eventId = this.gameController.game.planetName;
 		EventData eventData = this.eventDataService.EventDataList.FirstOrDefault((EventData x) => x.id == eventId);
-		this.leaderboardService.PostLeaderboardValue(this.gameController.game.planetName, eventData.leaderboardType, eventData.leaderboardSize, (int)pointsEarnedEvent.Total).Take(1).Subscribe(new Action<Tuple<string, int>>(this.OnPostLeaderboardValueSuccess), new Action<Exception>(this.OnPostLeaderboardValueError)).AddTo(this.disposables);
+//		this.leaderboardService.PostLeaderboardValue(this.gameController.game.planetName, eventData.leaderboardType, eventData.leaderboardSize, (int)pointsEarnedEvent.Total).Take(1).Subscribe(new Action<Tuple<string, int>>(this.OnPostLeaderboardValueSuccess), new Action<Exception>(this.OnPostLeaderboardValueError)).AddTo(this.disposables);
 		this.enrolledEventList.Add(this.gameController.game.planetName);
 		this.SaveEnrolledEvents();
 	}
@@ -283,7 +282,6 @@ public class EventService : IEventService, IDisposable
 	private void GetRewardsForEvent(string eventId)
 	{
 		EventData eventData = this.eventDataService.EventDataList.FirstOrDefault((EventData x) => x.id == eventId);
-		this.leaderboardService.GetPlayerRank(eventId, eventData.leaderboardType, false).Take(1).Subscribe(new Action<LeaderboardRankData>(this.CreatePendingRewards), new Action<Exception>(this.OnPlayerRankError)).AddTo(this.disposables);
 	}
 
 	// Token: 0x060003DE RID: 990 RVA: 0x000150B8 File Offset: 0x000132B8
@@ -389,14 +387,14 @@ public class EventService : IEventService, IDisposable
 	// Token: 0x04000348 RID: 840
 	public static readonly string ENROLLED_KEY = "eventPlanetEnrollmentName";
 
-	// Token: 0x04000349 RID: 841
-	private static readonly UnfoldingId UNFOLDING_ID = new UnfoldingId
-	{
-		Id = "ShowEvent"
-	};
+    // Token: 0x04000349 RID: 841
+    private static readonly UnfoldingId UNFOLDING_ID = new UnfoldingId
+    {
+        Id = "ShowEvent"
+    };
 
-	// Token: 0x0400034A RID: 842
-	public static readonly TriggerData EVENTS_UNLOCKED_TRIGGER = new TriggerData
+    // Token: 0x0400034A RID: 842
+    public static readonly TriggerData EVENTS_UNLOCKED_TRIGGER = new TriggerData
 	{
 		Value = "5",
 		Id = "oil",
@@ -421,8 +419,6 @@ public class EventService : IEventService, IDisposable
 	// Token: 0x0400034F RID: 847
 	private ITriggerService triggerService;
 
-	// Token: 0x04000350 RID: 848
-	private ILeaderboardService leaderboardService;
 
 	// Token: 0x04000351 RID: 849
 	private IUserDataService userDataService;

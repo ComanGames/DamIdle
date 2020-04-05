@@ -74,7 +74,6 @@ public interface IGameController : IDisposable
 
     // Token: 0x170000E4 RID: 228
     // (get) Token: 0x06000AEE RID: 2798
-    AdHocRewardService AdHocRewardService { get; }
 
     // Token: 0x170000E5 RID: 229
     // (get) Token: 0x06000AEF RID: 2799
@@ -107,10 +106,6 @@ public interface IGameController : IDisposable
     // Token: 0x170000EC RID: 236
     // (get) Token: 0x06000AF6 RID: 2806
     ServerMessageService ServerMessageService { get; }
-
-    // Token: 0x170000ED RID: 237
-    // (get) Token: 0x06000AF7 RID: 2807
-    LeaderboardService LeaderboardService { get; }
 
     // Token: 0x170000EE RID: 238
     // (get) Token: 0x06000AF8 RID: 2808
