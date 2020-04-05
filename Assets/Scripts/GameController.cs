@@ -8,6 +8,7 @@ using AdCap.Ads;
 using AdCap.Redemption;
 using AdCap.Store;
 using AdComm;
+using Assets.Scripts.Utils;
 using HHTools.Navigation;
 using Platforms;
 using Platforms.Ad;
@@ -149,10 +150,6 @@ public sealed class GameController : IGameController, IDisposable
     // (set) Token: 0x06000A13 RID: 2579 RVA: 0x0002CEBC File Offset: 0x0002B0BC
     public ProfitBoostAdService ProfitBoostAdService { get; private set; }
 
-    // Token: 0x170000AA RID: 170
-    // (get) Token: 0x06000A14 RID: 2580 RVA: 0x0002CEC5 File Offset: 0x0002B0C5
-    // (set) Token: 0x06000A15 RID: 2581 RVA: 0x0002CECD File Offset: 0x0002B0CD
-    public AdHocRewardService AdHocRewardService { get; private set; }
 
     // Token: 0x170000AB RID: 171
     // (get) Token: 0x06000A16 RID: 2582 RVA: 0x0002CED6 File Offset: 0x0002B0D6
@@ -231,10 +228,6 @@ public sealed class GameController : IGameController, IDisposable
     // (set) Token: 0x06000A32 RID: 2610 RVA: 0x0002CFC2 File Offset: 0x0002B1C2
     public ServerMessageService ServerMessageService { get; private set; }
 
-    // Token: 0x170000BB RID: 187
-    // (get) Token: 0x06000A33 RID: 2611 RVA: 0x0002CFCB File Offset: 0x0002B1CB
-    // (set) Token: 0x06000A34 RID: 2612 RVA: 0x0002CFD3 File Offset: 0x0002B1D3
-    public LeaderboardService LeaderboardService { get; private set; }
 
     // Token: 0x170000BC RID: 188
     // (get) Token: 0x06000A35 RID: 2613 RVA: 0x0002CFDC File Offset: 0x0002B1DC
@@ -266,14 +259,6 @@ public sealed class GameController : IGameController, IDisposable
     // (set) Token: 0x06000A40 RID: 2624 RVA: 0x0002D039 File Offset: 0x0002B239
     public CrossPromoService CrossPromoService { get; private set; }
 
-    // Token: 0x170000C2 RID: 194
-    // (get) Token: 0x06000A41 RID: 2625 RVA: 0x0002D042 File Offset: 0x0002B242
-    // (set) Token: 0x06000A42 RID: 2626 RVA: 0x0002D04A File Offset: 0x0002B24A
-    public SteamService SteamService { get; private set; }
-
-    // Token: 0x170000C3 RID: 195
-    // (get) Token: 0x06000A43 RID: 2627 RVA: 0x0002D053 File Offset: 0x0002B253
-    // (set) Token: 0x06000A44 RID: 2628 RVA: 0x0002D05B File Offset: 0x0002B25B
     public bool IsLoadingPlanet { get; private set; }
 
     // Token: 0x170000C4 RID: 196
@@ -343,7 +328,6 @@ public sealed class GameController : IGameController, IDisposable
         Helper.GetPlatformStore();
         this.EventService = new EventService();
         this.HhAssetBundleManager = new AssetBundleManager(true);
-        this.SteamService = new SteamService();
         this.UserDataService = new UserDataService();
         this.UpgradeService = new UpgradeService();
         this.UnlockService = new UnlockService();
@@ -359,7 +343,6 @@ public sealed class GameController : IGameController, IDisposable
         this.TriggerService = new TriggerService();
         this.SubscriptionService = new SubscriptionService();
         this.AdWatchService = new AdWatchService();
-        this.AdHocRewardService = new AdHocRewardService();
         this.ProfitBoostAdService = new ProfitBoostAdService();
         this.OfferwallService = new OfferwallService();
         this.RedemptionService = new RedemptionService();
@@ -368,7 +351,6 @@ public sealed class GameController : IGameController, IDisposable
         this.AngelService = new AngelInvestorService();
         this.PlatformAchievementService = new PlatformAchievementService();
         this.ServerMessageService = new ServerMessageService();
-        this.LeaderboardService = new LeaderboardService();
         this.PlanetMilestoneService = new PlanetMilestoneService();
         this.EventMissionsService = new EventMissionService();
         this.GrantRewardService = new GrantRewardService();
@@ -394,25 +376,14 @@ public sealed class GameController : IGameController, IDisposable
         this.SetPlanetName("Earth");
         this.WireUpPermenantStreams();
         this.DateTimeService.Init(this.PlatformAccount);
-        Action<Unit> <> 9__7;
-        Action<Exception> <> 9__8;
-        Action<WelcomeBackSequenceCompleted> <> 9__6;
-        Action<bool> <> 9__4;
-        Action <> 9__2;
         this.DateTimeService.Start(delegate
         {
             DataService dataService = this.DataService;
-            Action onComplete2;
-            if ((onComplete2 = <> 9__2) == null)
-            {
-                onComplete2 = (<> 9__2 = delegate ()
+            Action onComplete2= (delegate ()
                 {
                     PlatformAccount.AssetBundlePlatformConfig platformConfig = this.PlatformAccount.TitleDataConfig.AssetBundleConfig.GetPlatformConfig();
                     IObservable<bool> source = this.HhAssetBundleManager.InitializeAsync(platformConfig.DirectoryRoot, platformConfig.ManifestVersion);
-                    Action<bool> onNext;
-                    if ((onNext = <> 9__4) == null)
-                    {
-                        onNext = (<> 9__4 = delegate (bool _)
+                    Action<bool> onNext = ( delegate (bool b)
                         {
                             InventoryJsonDataObject externalData = this.DataService.ExternalData;
                             FeatureConfig.Initialize(externalData.FeatureConfig);
@@ -428,10 +399,6 @@ public sealed class GameController : IGameController, IDisposable
                             AdCapHardResetRewards.LoadHardResetData(externalData.AdCapHardResetRewards);
                             AdCapExternalDataStorage.LoadData(externalData);
                             StoreModalController.PANEL_SERVER_CONTROLED_DEFAULT = externalData.GeneralConfig[0].StoreConfig.DefaultPanelId;
-                            if (this.GlobalPlayerData.GetInt(ConvertLegacyDataCommand.SAVE_GAME_VERSION_KEY, 0) < ConvertLegacyDataCommand.MIN_SAVE_GAME_VERSION)
-                            {
-                                new ConvertLegacyDataCommand(externalData.LegacySaveDataConversion).Execute();
-                            }
                             PlayerData playerData = PlayerData.GetPlayerData("Global");
                             new InventoryToInventoryConversionCommand().Execute(externalData.LegacyInventorySaveDataConvertion[0].Inv2InvConvert, playerData);
                             new LoadSavedInventoryDataCommand().Execute();
@@ -443,13 +410,10 @@ public sealed class GameController : IGameController, IDisposable
                             this.TimerService.StartClock();
                             this.TriggerService.Init(this, this.UserDataService, this.DataService, this.StoreService, this.AngelService, this.DateTimeService, this.NavigationService, this.EventMissionsService, this.PlanetMilestoneService, this.FirstTimeBuyerService);
                             this.StoreService.Init(this, this.UserDataService, this.GrantRewardService, this.DateTimeService, this.UpgradeService, this.AngelService, this.TimerService, this.TriggerService, this.GlobalPlayerData, this.GlobalPlayerData.inventory, Helper.GetPlatformStore());
-                            this.LeaderboardService.Init(this, new UniversalLeaderboardPlatform());
                             this.ScheduledOfferService.Init(externalData.ScheduledOffers, this.DateTimeService, this.UserDataService);
-                            this.SteamService.Init();
                             this.AngelService.Init(this);
                             this.UpgradeService.Init();
                             this.UnlockService.Init();
-                            this.PlatformAchievementService.Init(this.SteamService);
                             this.GildingService.Init();
                             this.PlanetUnlockService.Init();
                             this.SubscriptionService.Init(this.DateTimeService, this.GrantRewardService);
@@ -469,18 +433,12 @@ public sealed class GameController : IGameController, IDisposable
                             this.FirstTimeBuyerService.Init(externalData.FirstTimeBuyerGroups, this, this.UserDataService, this.StoreService);
                             this.TimeWarpService.Init(this.UnfoldingService, this.ScheduledOfferService, this.StoreService);
                             IEventServiceServerRequests eventServiceServerRequests = new EventServiceServerRequests();
-                            this.EventService.Init(this, this.EventDataService, eventServiceServerRequests, this.DateTimeService, this.TriggerService, this.LeaderboardService, this.TimerService, this.UserDataService);
+                            this.EventService.Init(this, this.EventDataService, eventServiceServerRequests, this.DateTimeService, this.TriggerService,  this.TimerService, this.UserDataService);
                             this.PreLoadAllDefaultPlanetData();
-                            Action onComplete3 = onComplete;
-                            if (onComplete3 != null)
-                            {
-                                onComplete3();
-                            }
+
+                            onComplete();
                             IObservable<WelcomeBackSequenceCompleted> source2 = MessageBroker.Default.Receive<WelcomeBackSequenceCompleted>();
-                            Action<WelcomeBackSequenceCompleted> onNext2;
-                            if ((onNext2 = <> 9__6) == null)
-                            {
-                                onNext2 = (<> 9__6 = delegate (WelcomeBackSequenceCompleted w)
+                            Action<WelcomeBackSequenceCompleted>  onNext2 = (delegate (WelcomeBackSequenceCompleted w)
                                 {
                                     bool isLoadingPlanet = this.IsLoadingPlanet;
                                     this.IsLoadingPlanet = false;
@@ -489,39 +447,29 @@ public sealed class GameController : IGameController, IDisposable
                                     if (num > 1 && isLoadingPlanet && flag && this.FreeloaderAdService.TryAndShowAdAfterWelcomeBack && this.FreeloaderAdService.ShouldShowAd.Value)
                                     {
                                         IObservable<Unit> source3 = this.FreeloaderAdService.WatchAd("PlanetLoad").Take(1);
-                                        Action<Unit> onNext3;
-                                        if ((onNext3 = <> 9__7) == null)
-                                        {
-                                            onNext3 = (<> 9__7 = delegate (Unit adWatchSuccess)
+                                        Action<Unit> onNext3= ( delegate (Unit adWatchSuccess)
                                             {
                                                 this.AnalyticService.SendAdFinished("PlanetLoad", "Interstitial", this.game.planetName, "");
                                             });
-                                        }
-                                        Action<Exception> onError;
-                                        if ((onError = <> 9__8) == null)
-                                        {
-                                            onError = (<> 9__8 = delegate (Exception adWatchError)
+                                        Action<Exception> onError = (delegate (Exception adWatchError)
                                             {
                                                 bool value = Helper.GetPlatformAd().AdReadyMap[AdType.Interstitial].Value;
                                                 bool value2 = Helper.GetPlatformAd().AdReadyMap[AdType.RewardedVideo].Value;
                                                 this.AnalyticService.SendAdFinished("PlanetLoad", "Error=" + adWatchError, this.game.planetName, value2.ToString() + ":" + value.ToString());
                                             });
-                                        }
                                         source3.Subscribe(onNext3, onError);
                                     }
                                 });
-                            }
                             source2.Subscribe(onNext2).AddTo(this.instanceDisposables);
                             this.IsInitialized.Value = true;
                             this.logger.Trace("Initialized", Array.Empty<object>());
                         });
-                    }
+                    
                     source.Subscribe(onNext, delegate (Exception error)
                     {
                         Root.ShowConnectionErrorAndForceClose("FailedToLoadAssetbundleManifest", "Startup");
                     });
                 });
-            }
             dataService.Init(onComplete2, delegate (Exception error)
             {
                 Root.ShowConnectionErrorAndForceClose("FailedToInitDataService", error.Message);
@@ -666,13 +614,12 @@ public sealed class GameController : IGameController, IDisposable
             {
                 if (attempts < 2)
                 {
-                    GameController <> 4__this = this;
                     string pPlanetName2 = pPlanetName;
                     string pPlanetTheme2 = pPlanetTheme;
                     int attempts2 = attempts + 1;
                     attempts = attempts2;
 
-                    <> 4__this.LoadPlanetAssetBundles(pPlanetName2, pPlanetTheme2, attempts2);
+                    LoadPlanetAssetBundles(pPlanetName2, pPlanetTheme2, attempts2);
                     return;
                 }
                 Platforms.Logger.Logger.GetLogger(this).Error(exception.Message);
@@ -708,25 +655,9 @@ public sealed class GameController : IGameController, IDisposable
         Action postLoadDelegate = delegate ()
         {
             this.OnLoadNewPlanetPost();
-            KongLogUtil.LogConsole("UNLOAD UNUSED ASSETS!!!");
             Resources.UnloadUnusedAssets();
         };
         this.SetPlanetName(planetName);
-        Action <> 9__4;
-        Func<GameState_Serialized, bool> <> 9__3;
-        Action <> 9__5;
-        Func<EventModel, bool> <> 9__8;
-        Action <> 9__10;
-        Action <> 9__11;
-        Action<Unit> <> 9__14;
-        Action <> 9__15;
-        Action <> 9__16;
-        Action<Exception> <> 9__13;
-        Action <> 9__17;
-        Action <> 9__18;
-        Action<Exception> <> 9__7;
-        Action <> 9__19;
-        Action <> 9__20;
         this.HhAssetBundleManager.GetBundleAsync("gamestate-" + this.planetName.ToLower()).Subscribe(delegate (IAssetBundle gameStateBundle)
         {
             GameState_Serialized[] array = gameStateBundle.LoadAllAssets<GameState_Serialized>();
@@ -1423,8 +1354,6 @@ public sealed class GameController : IGameController, IDisposable
     // Token: 0x04000891 RID: 2193
     public List<PlanetData> PlanetDataList = new List<PlanetData>();
 
-    // Token: 0x04000892 RID: 2194
-    public ReactiveProperty<Gender> CurrentGender = new ReactiveProperty<Gender>();
 
     // Token: 0x04000893 RID: 2195
     public ReactiveProperty<bool> IsMuted = new ReactiveProperty<bool>();
