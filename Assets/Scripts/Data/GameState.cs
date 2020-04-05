@@ -127,9 +127,7 @@ public class GameState
 	// Token: 0x14000060 RID: 96
 	// (add) Token: 0x06000A9A RID: 2714 RVA: 0x0002EA68 File Offset: 0x0002CC68
 	// (remove) Token: 0x06000A9B RID: 2715 RVA: 0x0002EAA0 File Offset: 0x0002CCA0
-	public event Action<VentureModel> OnVentureBoosted = delegate(VentureModel <p0>)
-	{
-	};
+    public event Action<VentureModel> OnVentureBoosted;
 
 	// Token: 0x06000A9C RID: 2716 RVA: 0x0002EAD8 File Offset: 0x0002CCD8
 	public GameState()

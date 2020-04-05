@@ -4,11 +4,8 @@ using System.Linq;
 using UniRx;
 using UnityEngine;
 
-// Token: 0x02000160 RID: 352
 public class VentureModel
 {
-	// Token: 0x170000FE RID: 254
-	// (get) Token: 0x06000B11 RID: 2833 RVA: 0x00031F1E File Offset: 0x0003011E
 	public IObservable<double> FinishedRunning
 	{
 		get
@@ -23,65 +20,29 @@ public class VentureModel
 		}
 	}
 
-	// Token: 0x170000FF RID: 255
-	// (get) Token: 0x06000B12 RID: 2834 RVA: 0x00031F3D File Offset: 0x0003013D
-	// (set) Token: 0x06000B13 RID: 2835 RVA: 0x00031F45 File Offset: 0x00030145
 	public string Id { get; private set; }
 
-	// Token: 0x17000100 RID: 256
-	// (get) Token: 0x06000B14 RID: 2836 RVA: 0x00031F4E File Offset: 0x0003014E
-	// (set) Token: 0x06000B15 RID: 2837 RVA: 0x00031F56 File Offset: 0x00030156
 	public string Name { get; private set; }
 
-	// Token: 0x17000101 RID: 257
-	// (get) Token: 0x06000B16 RID: 2838 RVA: 0x00031F5F File Offset: 0x0003015F
-	// (set) Token: 0x06000B17 RID: 2839 RVA: 0x00031F67 File Offset: 0x00030167
 	public string Plural { get; private set; }
 
-	// Token: 0x17000102 RID: 258
-	// (get) Token: 0x06000B18 RID: 2840 RVA: 0x00031F70 File Offset: 0x00030170
-	// (set) Token: 0x06000B19 RID: 2841 RVA: 0x00031F78 File Offset: 0x00030178
 	public string BonusName { get; private set; }
 
-	// Token: 0x17000103 RID: 259
-	// (get) Token: 0x06000B1A RID: 2842 RVA: 0x00031F81 File Offset: 0x00030181
-	// (set) Token: 0x06000B1B RID: 2843 RVA: 0x00031F89 File Offset: 0x00030189
 	public string ImageName { get; private set; }
 
-	// Token: 0x17000104 RID: 260
-	// (get) Token: 0x06000B1C RID: 2844 RVA: 0x00031F92 File Offset: 0x00030192
-	// (set) Token: 0x06000B1D RID: 2845 RVA: 0x00031F9A File Offset: 0x0003019A
 	public double ExpenseRate { get; set; }
 
-	// Token: 0x17000105 RID: 261
-	// (get) Token: 0x06000B1E RID: 2846 RVA: 0x00031FA3 File Offset: 0x000301A3
-	// (set) Token: 0x06000B1F RID: 2847 RVA: 0x00031FAB File Offset: 0x000301AB
 	public ReadOnlyReactiveProperty<float> EffectiveCoolDownTime { get; private set; }
 
-	// Token: 0x17000106 RID: 262
-	// (get) Token: 0x06000B20 RID: 2848 RVA: 0x00031FB4 File Offset: 0x000301B4
-	// (set) Token: 0x06000B21 RID: 2849 RVA: 0x00031FBC File Offset: 0x000301BC
 	public ReadOnlyReactiveProperty<double> ProfitOnNext { get; private set; }
 
-	// Token: 0x17000107 RID: 263
-	// (get) Token: 0x06000B22 RID: 2850 RVA: 0x00031FC5 File Offset: 0x000301C5
-	// (set) Token: 0x06000B23 RID: 2851 RVA: 0x00031FCD File Offset: 0x000301CD
 	public ReadOnlyReactiveProperty<double> CashPerSec { get; set; }
 
-	// Token: 0x14000068 RID: 104
-	// (add) Token: 0x06000B24 RID: 2852 RVA: 0x00031FD8 File Offset: 0x000301D8
-	// (remove) Token: 0x06000B25 RID: 2853 RVA: 0x00032010 File Offset: 0x00030210
 	private event Func<double, double> RecalculateDeltaTime;
-
-	// Token: 0x06000B26 RID: 2854 RVA: 0x00032048 File Offset: 0x00030248
-	public VentureModel(Venture venture, IObservable<double> angelBonus, IObservable<float> totalProfitMultiplier, BoolReactiveProperty isPlatinumBoosted, IObservable<double> platinumBoostedVentureBonus, List<TriggerData> visableTriggers, List<TriggerData> unlockTriggers) : this(venture.id, venture.name, venture.baseAmount, venture.imageName, venture.costPer, venture.profitPer, (float)venture.cooldownTime, venture.expenseRate, venture.plural, venture.bonusName, angelBonus, totalProfitMultiplier, isPlatinumBoosted, platinumBoostedVentureBonus, visableTriggers, unlockTriggers)
-	{
-	}
 
 	// Token: 0x06000B27 RID: 2855 RVA: 0x000320A4 File Offset: 0x000302A4
 	public VentureModel(string id, string name, int numOwned, string imageName, double costPer, double profitPer, float coolDownTime, double expenseRate, string plural, string bonusName, IObservable<double> angelBonus, IObservable<float> totalProfitMultiplier, BoolReactiveProperty isPlatinumBoosted, IObservable<double> platinumBoostedVentureBonus, List<TriggerData> visableTriggers, List<TriggerData> unlockTriggers)
 	{
-		VentureModel <>4__this = this;
 		this.Id = id;
 		this.Name = name;
 		this.NumOwned_Base.Value = (double)numOwned;
@@ -94,55 +55,45 @@ public class VentureModel
 		this.BonusName = bonusName;
 		this.CostPer.Value = costPer;
 		this.initialCostPer = costPer;
-		this.NumOwned_Base.CombineLatest(this.NumOwned_Upgrades, (double b, double u) => b + u).Subscribe(delegate(double x)
-		{
-			<>4__this.TotalOwned.Value = x;
-		});
+		this.NumOwned_Base.CombineLatest(this.NumOwned_Upgrades, (double b, double u) => b + u).Subscribe(delegate(double x) { this.TotalOwned.Value = x; });
 		this.AccountantEffect.Subscribe(delegate(double v)
 		{
-			<>4__this.OnVentureCostChange();
+			this.OnVentureCostChange();
 		}).AddTo(this._Disposables);
 		this.EffectiveCostReduction.Subscribe(delegate(double v)
 		{
-			<>4__this.OnVentureCostChange();
+			this.OnVentureCostChange();
 		}).AddTo(this._Disposables);
 		this.equippedMultiplierItemBonuses.Add(new ReactiveProperty<float>(0f));
 		this.equippedSpeedItemBonuses.Add(new ReactiveProperty<float>(0f));
 		this.equippedCostReductionItemBonuses.Add(new ReactiveProperty<float>(0f));
 		this.visableTriggers = visableTriggers;
 		this.unlockTriggers = unlockTriggers;
-		IObservable<double> left = this.ProfitPer.CombineLatest(this.TotalOwned, (double p, double o) => p * o).CombineLatest(this.totalVentureBoostBonus, (double p, double t) => p * t).CombineLatest(this.gildLevel, (double p, int g) => p * <>4__this.CalculateTotalGildBonus(<>4__this.gildLevel.Value));
+		IObservable<double> left = this.ProfitPer.CombineLatest(this.TotalOwned, (double p, double o) => p * o).CombineLatest(this.totalVentureBoostBonus, (double p, double t) => p * t).CombineLatest(this.gildLevel, (double p, int g) => p *  this.CalculateTotalGildBonus( this.gildLevel.Value));
 		this.EffectiveCoolDownTime = this.CoolDownTime.CombineLatest(this.speedItemBonus, (float cooldown, float ventureBoost) => cooldown / (1f + ventureBoost)).ToReadOnlyReactiveProperty<float>();
 		this.CashPerSec = left.CombineLatest(angelBonus, (double bProfit, double aBonus) => bProfit * aBonus).CombineLatest(totalProfitMultiplier, this.ventureMultiplierBonus, (double bProfit, float tMultiplier, float vmBonus) => bProfit * (double)(tMultiplier + vmBonus)).CombineLatest(this.EffectiveCoolDownTime, (double pValue, float cdTime) => pValue / (double)cdTime).ToReadOnlyReactiveProperty<double>();
 		this.ProfitOnNext = left.CombineLatest(angelBonus, (double p, double a) => p * a).CombineLatest(totalProfitMultiplier, this.ventureMultiplierBonus, (double m, float t, float v) => m * (double)(t + v)).ToReadOnlyReactiveProperty<double>();
-		Action<double> <>9__17;
-		Action<double> <>9__18;
 		this.IsBoosted.CombineLatest(isPlatinumBoosted, new Func<bool, bool, Tuple<bool, bool>>(Tuple.Create<bool, bool>)).Subscribe(delegate(Tuple<bool, bool> t)
 		{
 			if (t.Item1)
 			{
-				IObservable<double> source = <>4__this.goldBoostedVentureBonusValue;
+				IObservable<double> source =  this.goldBoostedVentureBonusValue;
 				Action<double> onNext;
-				if ((onNext = <>9__17) == null)
-				{
-					onNext = (<>9__17 = delegate(double gv)
-					{
-						<>4__this.totalVentureBoostBonus.Value = gv;
-					});
-				}
-				source.Subscribe(onNext).AddTo(<>4__this._Disposables);
+                onNext =  delegate(double gv)
+                {
+                     this.totalVentureBoostBonus.Value = gv;
+                };
+
+				source.Subscribe(onNext).AddTo( this._Disposables);
 				if (t.Item2)
 				{
 					IObservable<double> platinumBoostedVentureBonus2 = platinumBoostedVentureBonus;
 					Action<double> onNext2;
-					if ((onNext2 = <>9__18) == null)
-					{
-						onNext2 = (<>9__18 = delegate(double pv)
+						onNext2 = delegate(double pv)
 						{
-							<>4__this.totalVentureBoostBonus.Value = pv;
-						});
-					}
-					platinumBoostedVentureBonus2.Subscribe(onNext2).AddTo(<>4__this._Disposables);
+							 this.totalVentureBoostBonus.Value = pv;
+						};
+					platinumBoostedVentureBonus2.Subscribe(onNext2).AddTo( this._Disposables);
 				}
 			}
 		}).AddTo(this._Disposables);
@@ -720,11 +671,8 @@ public class VentureModel
 	public Sprite UnlockTargetSprite;
 
 	// Token: 0x0400095B RID: 2395
-	private Action<double> _FinishedRunning = delegate(double <p0>)
-	{
-	};
+    private Action<double> _FinishedRunning;
 
-	// Token: 0x04000961 RID: 2401
 	private IObservable<double> goldBoostedVentureBonusValue = new ReactiveProperty<double>(7.77);
 
 	// Token: 0x04000962 RID: 2402
