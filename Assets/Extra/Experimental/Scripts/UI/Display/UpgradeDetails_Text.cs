@@ -66,7 +66,7 @@ namespace IdleClickerKit
 				}
 				break;
 			case UpgradeLabelType.COST:
-				myText.text = upgrade.Cost.ToString ();
+				 myText.text = ClickTotal_Text.GetStringForValue(upgrade.Cost);
 				break;
 			case UpgradeLabelType.MAXED_NAME:
 				myText.text = upgrade.UpgradeName + " (MAXED)";

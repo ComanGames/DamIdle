@@ -62,7 +62,7 @@ namespace IdleClickerKit
 		private IEnumerator ShowClickTotal()
 		{
 			displayedTotal = ClickManager.GetInstance(clickName).Clicks;
-			myText.text = GetStringForValue (displayedTotal);
+			myText.text = GetStringForValue (displayedTotal, useCommas, useKSymbol, useMSymbol, useBSymbol);
 
 			while (true) {
 				if (displayedTotal != ClickManager.GetInstance(clickName).Clicks) {
@@ -86,21 +86,21 @@ namespace IdleClickerKit
 					else if (difference < -400) displayedTotal += 133;
 					else if (difference < -40) displayedTotal += 13;
 					else if (difference < 0) displayedTotal += 1;
-					myText.text = GetStringForValue (displayedTotal);
+					myText.text = GetStringForValue (displayedTotal, useCommas, useKSymbol, useMSymbol, useBSymbol);
 				}
 				yield return true;
 			}
 		}
 
-		public string GetStringForValue(long value) {
-			if (value >= 100000000000 && useBSymbol)
-				return (useCommas ? string.Format ("{0:N0}B", value / 1000000000) : string.Format ("{0:D}B", value / 1000000000));
-			else if (value >= 100000000 && useMSymbol)
-				return (useCommas ? string.Format ("{0:N0}M", value / 1000000) : string.Format ("{0:D}M", value / 1000000));
-			else if (value >= 100000 && useKSymbol) {
-				return (useCommas ? string.Format ("{0:N0}K", value / 1000) : string.Format ("{0:D}K", value / 1000));
+		public static string GetStringForValue(long value, bool commas=true, bool kSymbol=true, bool mSymbol=true, bool bSymbol=true) {
+			if (value >= 10000000000 && bSymbol)
+				return (commas ? string.Format ("{0:N0}B", value / 1000000000) : string.Format ("{0:D}B", value / 1000000000));
+			else if (value >= 10000000 && mSymbol)
+				return (commas ? string.Format ("{0:N0}M", value / 1000000) : string.Format ("{0:D}M", value / 1000000));
+			else if (value >= 10000 && kSymbol) {
+				return (commas ? string.Format ("{0:N0}K", value / 1000) : string.Format ("{0:D}K", value / 1000));
 			}
-			return (useCommas ?  string.Format("{0:N0}", value) :  string.Format("{0:D}", value));
+			return (commas ?  string.Format("{0:N0}", value) :  string.Format("{0:D}", value));
 		}
 	}
 }
