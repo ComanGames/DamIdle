@@ -67,7 +67,8 @@ namespace IdleClickerKit
 			while (true) {
 				if (displayedTotal != ClickManager.GetInstance(clickName).Clicks) {
 					float difference = displayedTotal - ClickManager.GetInstance(clickName).Clicks;
-					      if (difference > 400000000) displayedTotal -= 135137313;
+
+                    if (difference > 400000000) displayedTotal -= 135137313;
 					else if (difference > 40000000) displayedTotal -= 1351371;
 					else if (difference > 4000000) displayedTotal -= 1351371;
 					else if (difference > 400000) displayedTotal -= 135173;
@@ -86,6 +87,7 @@ namespace IdleClickerKit
 					else if (difference < -400) displayedTotal += 133;
 					else if (difference < -40) displayedTotal += 13;
 					else if (difference < 0) displayedTotal += 1;
+
 					myText.text = GetStringForValue (displayedTotal, useCommas, useKSymbol, useMSymbol, useBSymbol);
 				}
 				yield return true;

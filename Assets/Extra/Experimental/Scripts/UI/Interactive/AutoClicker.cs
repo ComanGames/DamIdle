@@ -46,13 +46,13 @@ namespace IdleClickerKit
 
 		virtual protected void StartClickers() {
 			if (!hasStarted) {
-				StartCoroutine (AutoClick());
+				ClickManager.Instance.StartCoroutine (AutoClick());
 				hasStarted = true;
 			}
 		}
 
 		virtual protected void StopClickers() {
-			StopCoroutine (AutoClick());
+			ClickManager.Instance.StopCoroutine (AutoClick());
 			hasStarted = false;
 		}
 
