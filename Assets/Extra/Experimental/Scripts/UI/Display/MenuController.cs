@@ -24,8 +24,15 @@ namespace IdleClickerKit
             HomeButton.onClick.AddListener(GoHome);
             FctoryButton.onClick.AddListener(GoFactory);
             PeopleButton.onClick.AddListener(GoPeople);
-            PeoplePanel.SetActive(false);
             FactoryPanel.SetActive(false);
+            GoPeople();
+            GoHome();
+        }
+
+        public void Start()
+        {
+
+            GoPeople();
             GoHome();
         }
 
