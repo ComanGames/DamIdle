@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 
@@ -33,6 +34,7 @@ namespace IdleClickerKit
 
 		protected long displayedTotal;
 
+        public event Action onCouningUp;
 		/// <summary>
 		/// Init.
 		/// </summary>
@@ -68,6 +70,9 @@ namespace IdleClickerKit
 				if (displayedTotal != ClickManager.GetInstance(clickName).Clicks) {
 					float difference = displayedTotal - ClickManager.GetInstance(clickName).Clicks;
 
+                    if (Math.Abs(difference) > 1f)
+                        onCouningUp?.Invoke();
+                        
                     if (difference > 400000000) displayedTotal -= 135137313;
 					else if (difference > 40000000) displayedTotal -= 1351371;
 					else if (difference > 4000000) displayedTotal -= 1351371;
