@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657868, g: 0.49641263, b: 0.57481706, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -827,8 +827,8 @@ MonoBehaviour:
   upgradeName: Dam Tube
   description: 
   alternateDescriptionText: 
-  cost: 1000
-  costIncrease: 0.5
+  cost: 3000
+  costIncrease: 1.3
   visibleCost: 0
   costClickName: 
   startingCount: 0
@@ -847,7 +847,7 @@ MonoBehaviour:
   - {fileID: 951215688}
   - {fileID: 444470526}
   - {fileID: 1901107683}
-  clicksAdded: 500
+  clicksAdded: 20
 --- !u!114 &84193558
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7841,7 +7841,7 @@ MonoBehaviour:
   upgradeName: Managers
   description: Hire more Engeniers
   alternateDescriptionText: 
-  cost: 10000
+  cost: 100000
   costIncrease: 1
   visibleCost: 0
   costClickName: 
@@ -7861,7 +7861,7 @@ MonoBehaviour:
   - {fileID: 681989606}
   - {fileID: 2138459896}
   - {fileID: 215005269}
-  clickAmount: 1000
+  clickAmount: 300
   timeInterval: 1
 --- !u!114 &589201896
 MonoBehaviour:
@@ -8120,7 +8120,7 @@ MonoBehaviour:
   description: 
   alternateDescriptionText: 
   cost: 10
-  costIncrease: 0.5
+  costIncrease: 0.8
   visibleCost: 0
   costClickName: 
   startingCount: 0
@@ -13416,7 +13416,7 @@ MonoBehaviour:
   upgradeName: Designers
   description: Hire more Engeniers
   alternateDescriptionText: 
-  cost: 5000
+  cost: 30000
   costIncrease: 1
   visibleCost: 0
   costClickName: 
@@ -13436,7 +13436,7 @@ MonoBehaviour:
   - {fileID: 2037596023}
   - {fileID: 460579891}
   - {fileID: 825169287}
-  clickAmount: 500
+  clickAmount: 150
   timeInterval: 1
 --- !u!114 &1026939062
 MonoBehaviour:
@@ -15187,7 +15187,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AspectMode: 0
-  m_AspectRatio: 3.3850965
+  m_AspectRatio: 10.801486
 --- !u!1 &1242097387
 GameObject:
   m_ObjectHideFlags: 0
@@ -16196,8 +16196,8 @@ MonoBehaviour:
   upgradeName: Accumulation
   description: 
   alternateDescriptionText: 
-  cost: 100
-  costIncrease: 0.5
+  cost: 150
+  costIncrease: 1.2
   visibleCost: 0
   costClickName: 
   startingCount: 0
@@ -16216,7 +16216,7 @@ MonoBehaviour:
   - {fileID: 1040751684}
   - {fileID: 2077406923}
   - {fileID: 980166360}
-  clicksAdded: 10
+  clicksAdded: 5
 --- !u!114 &1293237372
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17466,7 +17466,7 @@ MonoBehaviour:
   - {fileID: 106329707}
   - {fileID: 546032300}
   - {fileID: 1877968875}
-  clickAmount: 1
+  clickAmount: 10
   timeInterval: 1
 --- !u!1 &1403372516
 GameObject:
@@ -17859,8 +17859,8 @@ MonoBehaviour:
   upgradeName: Geo Thermal
   description: 
   alternateDescriptionText: 
-  cost: 10000
-  costIncrease: 0.5
+  cost: 35000
+  costIncrease: 1.3
   visibleCost: 0
   costClickName: 
   startingCount: 0
@@ -17879,7 +17879,7 @@ MonoBehaviour:
   - {fileID: 1639061913}
   - {fileID: 2080238198}
   - {fileID: 1980036606}
-  clicksAdded: 2000
+  clicksAdded: 50
 --- !u!114 &1438800705
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17996,8 +17996,8 @@ MonoBehaviour:
   upgradeName: Arificial
   description: 
   alternateDescriptionText: 
-  cost: 100000
-  costIncrease: 0.5
+  cost: 200000
+  costIncrease: 1.3
   visibleCost: 0
   costClickName: 
   startingCount: 0
@@ -18016,7 +18016,7 @@ MonoBehaviour:
   - {fileID: 327663334}
   - {fileID: 359159983}
   - {fileID: 1721480331}
-  clicksAdded: 20000
+  clicksAdded: 200
 --- !u!114 &1448448110
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21890,7 +21890,7 @@ MonoBehaviour:
   upgradeName: AI
   description: Hire more Engeniers
   alternateDescriptionText: 
-  cost: 100000
+  cost: 500000
   costIncrease: 1
   visibleCost: 0
   costClickName: 
@@ -21910,7 +21910,7 @@ MonoBehaviour:
   - {fileID: 1477103064}
   - {fileID: 1958168081}
   - {fileID: 1523045370}
-  clickAmount: 100000
+  clickAmount: 1000
   timeInterval: 1
 --- !u!114 &1679516465
 MonoBehaviour:
@@ -24322,7 +24322,7 @@ MonoBehaviour:
   upgradeName: Lead Engenier
   description: Hire more Engeniers
   alternateDescriptionText: 
-  cost: 1000
+  cost: 5000
   costIncrease: 1
   visibleCost: 0
   costClickName: 
@@ -24342,7 +24342,7 @@ MonoBehaviour:
   - {fileID: 935939203}
   - {fileID: 966064123}
   - {fileID: 607901099}
-  clickAmount: 10
+  clickAmount: 30
   timeInterval: 1
 --- !u!114 &1892322083
 MonoBehaviour:
