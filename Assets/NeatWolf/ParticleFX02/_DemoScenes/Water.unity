@@ -2198,6 +2198,7 @@ GameObject:
   m_Component:
   - component: {fileID: 486065767}
   - component: {fileID: 486065766}
+  - component: {fileID: 486065768}
   m_Layer: 0
   m_Name: Camera
   m_TagString: Untagged
@@ -2262,6 +2263,37 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 22.836, y: -48.552002, z: 0}
+--- !u!114 &486065768
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 486065765}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_CameraOutput: 0
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_RenderPostProcessing: 0
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_Version: 2
 --- !u!1001 &487180428
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3688,6 +3720,14 @@ PrefabInstance:
     - target: {fileID: 400000, guid: f806ab79ffc388d46b30f5927606899a, type: 3}
       propertyPath: m_RootOrder
       value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: f806ab79ffc388d46b30f5927606899a, type: 3}
+      propertyPath: InitialModule.startRotationX.minMaxState
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: f806ab79ffc388d46b30f5927606899a, type: 3}
+      propertyPath: InitialModule.startRotationY.minMaxState
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f806ab79ffc388d46b30f5927606899a, type: 3}
@@ -6127,6 +6167,14 @@ PrefabInstance:
     - target: {fileID: 400000, guid: 86303049ba6f7d54ca2971d1516ddf54, type: 3}
       propertyPath: m_RootOrder
       value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: 86303049ba6f7d54ca2971d1516ddf54, type: 3}
+      propertyPath: InitialModule.startRotationX.minMaxState
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: 86303049ba6f7d54ca2971d1516ddf54, type: 3}
+      propertyPath: InitialModule.startRotationY.minMaxState
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 86303049ba6f7d54ca2971d1516ddf54, type: 3}
