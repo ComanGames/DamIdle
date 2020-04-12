@@ -3,7 +3,7 @@
 
 ## 3D Design 
 
- ![](https://raw.githubusercontent.com/ComanGames/DamIdle/master/Resources/HardWorkOnUnityIntegration.png)
+ ![](https://raw.githubusercontent.com/ComanGames/DamIdle/master/Resources/cycle.png)
 
 ## Game
 
