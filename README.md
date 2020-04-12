@@ -2,7 +2,7 @@
 
  [Link](https://comangames.github.io/DamIdle/) - Play in browser
  
- Our micro game. Made by me and Eugene. To showcase our teamwork skills. 
+ Our microgame. Made by me and Eugene. To showcase our teamwork skills. 
  And Eugene Unity skills particulary
  
  ![](https://raw.githubusercontent.com/ComanGames/DamIdle/master/Resources/main.gif)
@@ -18,7 +18,7 @@ We used Unity 2020 new Universal Pipeline.
 ![](https://i.ytimg.com/vi/gPc0BeRopYc/maxresdefault.jpg)
 
 ## Shader Graph
-In order to squize maximum Eugen created spaecial shader for toon like water.
+In order to squize maximum Eugene created spaecial shader for toon like water.
 Using new shader graph in Unity
 
 ![](https://raw.githubusercontent.com/ComanGames/DamIdle/master/Resources/ShaderGraphc.png)
@@ -30,7 +30,7 @@ To give dynamic to the game. And integrate FX into gameplay
 ![](https://raw.githubusercontent.com/ComanGames/DamIdle/master/Resources/particlesFx.png)
 
 # Gameplay 
-Also I should mantiane that Eugen done all integration by himself. And made the commits. 
+Also I should maintaine that Eugene done all integration by himself. And made the commits. 
 And pushed them to github. As well he worked on game balance and UI Design.
 Tgat is huge advantage. 
 
