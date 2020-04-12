@@ -1,4 +1,11 @@
 # DamIdle
+"Dam Tes"t done by Eugen Petrovsky 3D artist.
+
+## 3D Design 
+
+ ![](https://raw.githubusercontent.com/ComanGames/DamIdle/master/Resources/HardWorkOnUnityIntegration.png)
+
+## Game
 
  [Link](https://comangames.github.io/DamIdle/) - Play in browser
  
