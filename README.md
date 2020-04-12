@@ -2,12 +2,12 @@
 
  [Link](https://comangames.github.io/DamIdle/) - Play in browser
  
- Our micro game. Made by me end Eugen. To showcase our teamwork skills. 
- And Eugen Unity skills particulary
+ Our micro game. Made by me and Eugene. To showcase our teamwork skills. 
+ And Eugene Unity skills particulary
  
  ![](https://raw.githubusercontent.com/ComanGames/DamIdle/master/Resources/main.gif)
 # Visual 
-We walk long way from the 3D art till the Unity integration
+We walk long way from the 3D art untill the Unity integration
 And he made long game from having 3D art to have nice looking game.
 
  ![](https://raw.githubusercontent.com/ComanGames/DamIdle/master/Resources/HardWorkOnUnityIntegration.png)
@@ -24,13 +24,13 @@ Using new shader graph in Unity
 ![](https://raw.githubusercontent.com/ComanGames/DamIdle/master/Resources/ShaderGraphc.png)
 
 ## Particles 
-Again in order to have unitqe and cool looking game Eugen worked on Waterflow particles effect's.
+Again in order to have unitque and cool looking game Eugene worked on Waterflow particles effect's.
 To give dynamic to the game. And integrate FX into gameplay
 
 ![](https://raw.githubusercontent.com/ComanGames/DamIdle/master/Resources/particlesFx.png)
 
 # Gameplay 
-Also I shold mantiane that Eugen done all integration by himself. And made the mommits. 
+Also I should mantiane that Eugen done all integration by himself. And made the commits. 
 And pushed them to github. As well he worked on game balance and UI Design.
 Tgat is huge advantage. 
 
