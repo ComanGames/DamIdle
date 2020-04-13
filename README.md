@@ -3,7 +3,7 @@
 
 ## 3D Design 
 
- ![](https://raw.githubusercontent.com/ComanGames/DamIdle/master/Resources/cycle.png)
+ ![](https://raw.githubusercontent.com/ComanGames/DamIdle/master/Resources/cycle2.png)
 
 ## Game
 
