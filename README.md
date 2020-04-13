@@ -3,7 +3,9 @@
 
 ## 3D Design 
 
- ![](https://raw.githubusercontent.com/ComanGames/DamIdle/master/Resources/cycle.png)
+<p align="center">
+   <img width="800" src="https://raw.githubusercontent.com/ComanGames/DamIdle/master/Resources/cycle.png">
+</p>
 
 ## Game
 
@@ -11,8 +13,10 @@
  
  Our microgame. Made by me and Eugene. To showcase our teamwork skills. 
  And Eugene Unity skills particulary
+<p align="center"> 
+    <img width="500" src="https://raw.githubusercontent.com/ComanGames/DamIdle/master/Resources/main.gif">
+ </p>
  
- ![](https://raw.githubusercontent.com/ComanGames/DamIdle/master/Resources/main.gif)
 # Visual 
 We walk long way from the 3D art untill the Unity integration
 And he made long game from having 3D art to have nice looking game.
