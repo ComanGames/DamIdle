@@ -1,5 +1,5 @@
 # DamIdle
-"Dam Tes"t done by Eugen Petrovsky 3D artist.
+"Dam Test" done by Eugen Petrovsky 3D artist.
 
 ## 3D Design 
 
